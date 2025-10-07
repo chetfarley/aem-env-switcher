@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "AEM Environment Switcher",
+    "version": "1.0",
+    "description": "Quickly switch between AEM environments (Author, Publish, Preview).",
+    "action": {
+      "default_popup": "popup.html",
+      "default_icon": "icon128.png"
+    },
+    "options_page": "options.html",
+    "permissions": ["tabs", "storage"]
+  }
+  
