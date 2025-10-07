@@ -1,53 +1,206 @@
+/* --- CSS Vars --- */
+:root {
+  /* spacing */
+  --spacing-third: 0.333rlh;
+  --spacing-half: 0.5rlh;
+  --spacing-1: 1rlh;
+  --spacing-2: 2rlh;
+  /* colors */
+  --dark-gray-3: #333;
+  --dark-gray-4: #444;
+  --dark-gray-5: #555;
+  --dark-gray-4: #666;
+  --light-gray-e: #eee;
+  --white: #fff;
+
+  --body-background-color: #1e1e1e;
+  /* text */
+  --text-color--base: #f5f5f5;
+  --text-color--emphasis: #e8e85c;
+  /* links */
+  --link-color--base: #4cc9f0;
+  --link-color--hover: var(--white);
+  --link-background-color--hover: var(--dark-gray-3);
+  /* buttons */
+  --btn-text-color: var(--light-gray-e);
+  --btn-background-color: var(--dark-gray-3);
+  --btn-border-color: var(--dark-gray-4);
+  --btn-background-color--hover: var(--dark-gray-4);
+  --btn-border-color--hover: var(--dark-gray-6);
+  --btn-background-color--active: var(--dark-gray-5);
+
+  --btn-danger-text-color: var(--white);
+  --btn-danger-background-color: #d62828;
+  --btn-danger-border-color: #b21f1f;
+  --btn-danger-background-color--hover: #e63946;
+  /* section blocks */
+  --block-border: var(--dark-gray-3);
+  --block-background-color: #242424;
+  /* forms */
+  --label-text-color: #bbb;
+  --input-text-color: var(--light-gray-e);
+  --input-border-color: var(--dark-gray-4);
+  --input-background-color: #2a2a2a;
+}
+
+/* --- Global Reset --- */
+* {
+  box-sizing: border-box;
+}
 body {
-    font-family: Arial, sans-serif;
-    padding: 10px;
-    width: 280px;
-  }
-  
-  h2 {
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  button {
-    background: #0066cc;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 6px 10px;
-    margin-right: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background: #004b99;
-  }
-  
-  a {
-    color: #0066cc;
-    text-decoration: none;
-  }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
-  .env-block {
-    margin-bottom: 15px;
-  }
-  
-  input {
-    width: 100%;
-    padding: 4px;
-    margin-bottom: 5px;
-  }
-  
-  a.active {
-    font-weight: bold;
-    color: #fff;
-    background-color: #1faf2e;
-    padding: 2px 6px;
-    border-radius: 3px;
-    text-decoration: none;
-  }
-  
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--body-background-color);
+  color: var(--text-color--base);
+  margin: 0;
+  padding: var(--spacing-1);
+  box-sizing: border-box;
+}
+
+/* --- Main Extension Window --- */
+.popup {
+  width: 20rlh;
+}
+
+/* --- Headings --- */
+h2 {
+  color: var(--text-color--emphasis);
+  font-size: 1rem;
+  margin: 0 0 var(--spacing-half) 0;
+  text-align: center;
+}
+
+/* --- URL Display --- */
+#currentUrl {
+  font-size: 0.7rem;
+  word-break: break-all;
+  margin-bottom: var(--spacing-half);
+}
+
+/* --- Environment Links --- */
+#envLinks p {
+  margin: var(--spacing-third) 0;
+  font-size: 0.85rem;
+}
+
+#envLinks strong {
+  color: var(--text-color--emphasis);
+  font-weight: 600;
+  display: inline-block;
+  width: 60px;
+}
+
+#envLinks a {
+  color: var(--link-color--base);
+  text-decoration: none;
+  margin: 0 0.15rem;
+  padding: var(--spacing-third) var(--spacing-half);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  transition: background 0.2s, color 0.2s;
+}
+
+#envLinks a:hover {
+  background: var(--link-background-color--hover);
+  color: var(--link-color--hover);
+}
+
+/* --- Active state --- */
+#envLinks a.active {
+  background: var(--link-color--base);
+  color: var(--background-color--base);
+  font-weight: 600;
+}
+
+/* --- Buttons --- */
+.buttons {
+  display: flex;
+  gap: var(--spacing-half);
+}
+button {
+  background: var(--btn-background-color);
+  color: var(--btn-text-color);
+  border: 1px solid var(--btn-border-color);
+  border-radius: 6px;
+  padding: var(--spacing-third) var(--spacing-half);
+  margin-top: var(--spacing-half);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  width: 100%;
+}
+
+button:hover {
+  background: var(--btn-background-color--hover);
+  border-color: var(--btn-border-color--hover);
+}
+
+button:active {
+  background: var(--btn-background-color--active);
+}
+
+/* --- Layout for button row --- */
+#buttonRow {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-half);
+}
+
+/* --- Options page layout --- */
+#envInputs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+form#envForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: 50%;
+  margin-inline: auto;
+}
+
+.env-block {
+  border: 1px solid var(--block-border);
+  background: var(--block-background-color);
+  border-radius: 8px;
+  padding: var(--spacing-1);
+}
+
+.env-block h3 {
+  margin-top: 0;
+  color: var(--text-color--emphasis);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--block-border);
+  padding-bottom: var(--spacing-half);
+}
+
+label {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--label-text-color);
+  margin-block: var(--spacing-half) var(--spacing-third);
+}
+
+input[type="url"] {
+  width: 100%;
+  padding: var(--spacing-third);
+  font-size: 0.8rem;
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  background: var(--input-background-color);
+  color: var(--btn-text-color);;
+}
+
+/* --- Remove Env Button --- */
+.removeEnvBtn {
+  background: var(--btn-danger-background-color);
+  border: 1px solid var(--btn-danger-border-color);
+  color: var(--btn-danger-text-color);
+  transition: background 0.2s;
+}
+
+.removeEnvBtn:hover {
+  background: var(--btn-danger-background-color--hover);
+}
