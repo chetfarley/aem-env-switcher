@@ -6,33 +6,51 @@
   --spacing-1: 1rlh;
   --spacing-2: 2rlh;
   /* colors */
+  --dark-gray-2: #242424;
   --dark-gray-3: #333;
   --dark-gray-4: #444;
   --dark-gray-5: #555;
   --dark-gray-4: #666;
   --light-gray-e: #eee;
   --white: #fff;
+  --electric-60: hsl(194, 70%, 58%);
+  --electric-20: hsl(194, 70%, 20%);
+  --electric-15: hsl(194, 70%, 15%);
+  --electric-10: hsl(194, 70%, 10%);
 
   --body-background-color: #1e1e1e;
   /* text */
   --text-color--base: #f5f5f5;
-  --text-color--emphasis: #e8e85c;
+  --text-color--emphasis: #dfdfad;
   /* links */
-  --link-color--base: #4cc9f0;
+  --link-color--base: #47bbdf;
   --link-color--hover: var(--white);
   --link-background-color--hover: var(--dark-gray-3);
   /* buttons */
-  --btn-text-color: var(--light-gray-e);
-  --btn-background-color: var(--dark-gray-3);
-  --btn-border-color: var(--dark-gray-4);
-  --btn-background-color--hover: var(--dark-gray-4);
-  --btn-border-color--hover: var(--dark-gray-6);
-  --btn-background-color--active: var(--dark-gray-5);
+  /* primary */
+  --btn-primary-color:            var(--electric-60);
+  --btn-primary-background-color: var(--electric-20);
+  --btn-primary-border-color:     var(--electric-10);
+  --btn-primary-background-color--hover: var(--electric-15);
+  /* neutrals */
+  --btn-text-color:               var(--light-gray-e);
+  --btn-background-color:         var(--dark-gray-3);
+  --btn-border-color:             var(--dark-gray-4);
+  --btn-background-color--hover:  var(--dark-gray-4);
+  --btn-border-color--hover:      var(--dark-gray-6);
+  /* primary active*/  
+  --btn-color--active:            var(--dark-gray-2);
+  --btn-background-color--active: var(--electric-60);
+  --btn-border-color--active:     var(--electric-20);
 
+
+  
   --btn-danger-text-color: var(--white);
   --btn-danger-background-color: #d62828;
   --btn-danger-border-color: #b21f1f;
   --btn-danger-background-color--hover: #e63946;
+
+  --btn-border-radius: var(--spacing-third);
   /* section blocks */
   --block-border: var(--dark-gray-3);
   --block-background-color: #242424;
@@ -54,6 +72,15 @@ body {
   margin: 0;
   padding: var(--spacing-1);
   box-sizing: border-box;
+}
+
+/* Helpers */
+.mt-1 {
+  margin-block-start: var(--spacing-half);
+}
+
+.gap-1 {
+  gap: var(--spacing-half);
 }
 
 /* --- Main Extension Window --- */
@@ -78,7 +105,7 @@ h2 {
 
 /* --- Environment Links --- */
 #envLinks p {
-  margin: var(--spacing-third) 0;
+  margin-block: var(--spacing-1);
   font-size: 0.85rem;
 }
 
@@ -86,55 +113,76 @@ h2 {
   color: var(--text-color--emphasis);
   font-weight: 600;
   display: inline-block;
-  width: 60px;
+  font-size: 0.75rem;
+  align-self: center;
+  margin-inline-end: var(--spacing-third);
 }
 
-#envLinks a {
-  color: var(--link-color--base);
+/* --- EnvLinks Buttons --- */
+.buttongroup .button {
   text-decoration: none;
-  margin: 0 0.15rem;
-  padding: var(--spacing-third) var(--spacing-half);
-  border-radius: 4px;
+  margin-inline: -0.5px;
   font-size: 0.8rem;
-  transition: background 0.2s, color 0.2s;
+  border-radius: 0;
+  text-align: center;
+
+  border-color: var(--btn-primary-border-color);
+  color: var(--btn-primary-color);
+  background-color: var(--btn-primary-background-color);
 }
 
-#envLinks a:hover {
-  background: var(--link-background-color--hover);
-  color: var(--link-color--hover);
+.buttongroup .button:hover {
+  background-color: var(--btn-primary-background-color--hover);
+  border-color: var(--btn-primary-border-color);
 }
 
-/* --- Active state --- */
-#envLinks a.active {
-  background: var(--link-color--base);
-  color: var(--background-color--base);
+.buttongroup .button:first-of-type {
+  border-radius: var(--btn-border-radius) 0 0 var(--btn-border-radius);
+}
+
+.buttongroup .button:last-of-type {
+  border-radius: 0 var(--btn-border-radius) var(--btn-border-radius) 0;
+}
+
+.buttongroup .button.active {
+  color: var(--btn-color--active);
+  background: var(--btn-background-color--active);
+  border-color: var(--btn-border-color--active);
   font-weight: 600;
 }
 
-/* --- Buttons --- */
-.buttons {
+/* --- Generic Buttons --- */
+.buttons,
+.buttongroup {
   display: flex;
-  gap: var(--spacing-half);
 }
-button {
+
+.buttons > *,
+.buttongroup > * {
+ width: 100%; 
+}
+
+button, 
+.button {
   background: var(--btn-background-color);
   color: var(--btn-text-color);
   border: 1px solid var(--btn-border-color);
-  border-radius: 6px;
+  border-radius: var(--btn-border-radius);
   padding: var(--spacing-third) var(--spacing-half);
-  margin-top: var(--spacing-half);
   font-size: 0.8rem;
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
-  width: 100%;
+  text-decoration: none;
 }
 
-button:hover {
+button:hover, 
+.button:hover {
   background: var(--btn-background-color--hover);
   border-color: var(--btn-border-color--hover);
 }
 
-button:active {
+button:active, 
+.button:active {
   background: var(--btn-background-color--active);
 }
 

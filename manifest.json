@@ -5,7 +5,7 @@
     "description": "Quickly switch between AEM environments (Author, Publish, Preview).",
     "action": {
       "default_popup": "popup.html",
-      "default_icon": "icon128.png"
+      "default_icon": "icon.png"
     },
     "options_page": "options.html",
     "permissions": ["tabs", "storage"]

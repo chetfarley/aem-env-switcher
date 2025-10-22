@@ -6,25 +6,41 @@ const defaultConfig = {
   prod: { author: "", publish: "" },
 };
 
+const envOrder = ["localhost", "dev", "qa", "stage", "prod"]; // display order
+
+// Helper function to create environment input block
+function createEnvBlock(key, urls) {
+  const div = document.createElement("div");
+  div.className = "env-block";
+  div.innerHTML = `
+    <h3>${key.toUpperCase()}</h3>
+    <label>Author URL</label>
+    <input type="url" name="${key}-author" value="${urls.author}" placeholder="https://${key}-author.example.com">
+    <label>Publish URL</label>
+    <input type="url" name="${key}-publish" value="${urls.publish}" placeholder="https://${key}.example.com">
+    ${!["localhost", "dev", "qa", "stage", "prod"].includes(key)
+      ? `<button type="button" class="removeEnvBtn" data-env="${key}">Remove</button>`
+      : ""}
+  `;
+  return div;
+}
+
 // Render environment inputs dynamically
 function renderInputs(envs) {
   const container = document.getElementById("envInputs");
   container.innerHTML = "";
 
+  // First render ordered environments
+  for (const key of envOrder) {
+    const urls = envs[key];
+    if (!urls) continue;
+    container.appendChild(createEnvBlock(key, urls));
+  }
+  
+  // Then render any custom environments (not in envOrder)
   for (const [key, urls] of Object.entries(envs)) {
-    const div = document.createElement("div");
-    div.className = "env-block";
-    div.innerHTML = `
-      <h3>${key.toUpperCase()}</h3>
-      <label>Author URL</label>
-      <input type="url" name="${key}-author" value="${urls.author}" placeholder="https://${key}-author.example.com">
-      <label>Publish URL</label>
-      <input type="url" name="${key}-publish" value="${urls.publish}" placeholder="https://${key}.example.com">
-      ${!["localhost", "dev", "qa", "stage", "prod"].includes(key)
-        ? `<button type="button" class="removeEnvBtn" data-env="${key}">Remove</button>`
-        : ""}
-    `;
-    container.appendChild(div);
+    if (envOrder.includes(key)) continue; // Skip already rendered
+    container.appendChild(createEnvBlock(key, urls));
   }
 
   // Attach remove listeners
@@ -52,7 +68,8 @@ document.getElementById("envForm").addEventListener("submit", async (e) => {
   for (const input of inputs) {
     const [env, type] = input.name.split("-");
     envs[env] = envs[env] || {};
-    envs[env][type] = input.value;
+    // Remove trailing slash from URL if present
+    envs[env][type] = input.value.replace(/\/$/, "");
   }
 
   await chrome.storage.sync.set({ envs });

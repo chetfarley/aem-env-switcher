@@ -39,13 +39,14 @@ function transformUrl(currentUrl, clickedUrl, envBase, linkType) {
   if (!contentPathMatch) return null;
   const contentPath = contentPathMatch[0];
 
-  const isLocalhost = envBase.author.includes("localhost");
   let newUrl;
 
   switch (linkType) {
     case "author":
+      if (!envBase.author) return null;
       if (isAuthorTab || isPreviewTab || isPublishTab) {
         // Localhost doesn't need /ui#/aem/
+        const isLocalhost = envBase.author.includes("localhost");
         if (isLocalhost) {
           newUrl = `${envBase.author}/editor.html${contentPath}`;
         } else {
@@ -55,12 +56,14 @@ function transformUrl(currentUrl, clickedUrl, envBase, linkType) {
       break;
 
     case "publish":
+      if (!envBase.publish) return null;
       if (isAuthorTab || isPublishTab || isPreviewTab) {
         newUrl = `${envBase.publish}${contentPath}`;
       }
       break;
 
     case "preview":
+      if (!envBase.author) return null;
       if (isAuthorTab || isPreviewTab || isPublishTab) {
         newUrl = `${envBase.author}${contentPath}?wcmmode=disabled`;
       }
@@ -70,6 +73,32 @@ function transformUrl(currentUrl, clickedUrl, envBase, linkType) {
   return newUrl;
 }
 
+// Helper function to build environment links based on available URLs
+function buildEnvironmentLinks(key, base, path) {
+  const hasAuthor = base.author && base.author.trim() !== "";
+  const hasPublish = base.publish && base.publish.trim() !== "";
+  
+  if (!hasAuthor && !hasPublish) return null;
+  
+  const links = [];
+  
+  if (hasAuthor) {
+    const authorUrl = base.author + path;
+    links.push(`<a class="button" href="#" data-env="${key}" data-type="author" data-url="${authorUrl}">Author</a>`);
+    
+    // Preview uses author URL with wcmmode=disabled
+    const previewUrl = base.author + path + "?wcmmode=disabled";
+    links.push(`<a class="button" href="#" data-env="${key}" data-type="preview" data-url="${previewUrl}">Preview</a>`);
+  }
+  
+  if (hasPublish) {
+    const publishUrl = base.publish + path;
+    links.push(`<a class="button" href="#" data-env="${key}" data-type="publish" data-url="${publishUrl}">Publish</a>`);
+  }
+  
+  return `<strong>${key.toUpperCase()}</strong>${links.join("")}`;
+}
+
 // --- Main UI Logic ---
 document.addEventListener("DOMContentLoaded", async () => {
   const currentUrlDiv = document.getElementById("currentUrl");
@@ -77,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const refreshBtn = document.getElementById("refreshLinks");
   const openOptionsBtn = document.getElementById("openOptions");
 
-  const envOrder = ["local", "dev", "qa", "stage", "prod"]; // display order
+  const envOrder = ["localhost", "dev", "qa", "stage", "prod"]; // display order
 
   async function renderLinks() {
     clear(envLinksDiv);
@@ -87,28 +116,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const path = extractAemPath(currentUrl);
 
-    // Load user config (or defaults)
+    // Load user config
     const { envs } = await chrome.storage.sync.get("envs");
-    const config = envs || {
-      local: { author: "http://localhost:4502", publish: "http://localhost:4503" },
-      dev: { author: "https://author-dev.example.com", publish: "https://dev.example.com" },
-      qa: { author: "https://author-qa.example.com", publish: "https://qa.example.com" },
-      stage: { author: "https://author-stage.example.com", publish: "https://stage.example.com" },
-      prod: { author: "https://author.example.com", publish: "https://www.example.com" },
-    };
+    const config = envs || {};
 
     // Detect current environment & type
     let currentEnvKey = null;
     let currentType = null;
     for (const [key, base] of Object.entries(config)) {
-      if (currentUrl.startsWith(base.author)) {
+      if (base.author && currentUrl.startsWith(base.author)) {
         currentEnvKey = key;
         if (currentUrl.includes("editor.html")) currentType = "author";
         else if (currentUrl.includes("wcmmode=disabled")) currentType = "preview";
         else currentType = "publish";
         break;
       }
-      if (currentUrl.startsWith(base.publish)) {
+      if (base.publish && currentUrl.startsWith(base.publish)) {
         currentEnvKey = key;
         if (currentUrl.includes("wcmmode=disabled")) currentType = "preview";
         else currentType = "publish";
@@ -116,20 +139,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
 
-    // Render environment links
+    // Render environment links - only for environments with configured URLs
+    // First render ordered environments
     for (const key of envOrder) {
       const base = config[key];
       if (!base) continue;
-
-      const links = createLinkSet(base, path);
-      const p = document.createElement("p");
-      p.innerHTML = `
-        <strong>${key.toUpperCase()}</strong>:
-        <a href="#" data-env="${key}" data-type="author" data-url="${links.author}">Author</a> |
-        <a href="#" data-env="${key}" data-type="preview" data-url="${links.publish}">Preview</a> |
-        <a href="#" data-env="${key}" data-type="publish" data-url="${links.publish}">Publish</a>
-      `;
-      envLinksDiv.appendChild(p);
+      
+      const linkHtml = buildEnvironmentLinks(key, base, path);
+      if (linkHtml) {
+        const p = document.createElement("p");
+        p.classList.add('buttongroup');
+        p.innerHTML = linkHtml;
+        envLinksDiv.appendChild(p);
+      }
+    }
+    
+    // Then render any custom environments (not in envOrder)
+    for (const [key, base] of Object.entries(config)) {
+      if (envOrder.includes(key)) continue; // Skip already rendered
+      if (!base) continue;
+      
+      const linkHtml = buildEnvironmentLinks(key, base, path);
+      if (linkHtml) {
+        const p = document.createElement("p");
+        p.innerHTML = linkHtml;
+        envLinksDiv.appendChild(p);
+      }
     }
 
     // Add click handlers and highlight active link
