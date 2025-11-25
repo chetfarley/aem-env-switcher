@@ -96,7 +96,7 @@ function buildEnvironmentLinks(key, base, path) {
     links.push(`<a class="button" href="#" data-env="${key}" data-type="publish" data-url="${publishUrl}">Publish</a>`);
   }
   
-  return `<strong>${key.toUpperCase()}</strong>${links.join("")}`;
+  return `<strong>${key.toUpperCase()}</strong><div class="buttons">${links.join("")}</div>`;
 }
 
 // --- Main UI Logic ---
@@ -162,6 +162,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const linkHtml = buildEnvironmentLinks(key, base, path);
       if (linkHtml) {
         const p = document.createElement("p");
+        p.classList.add('buttongroup');
         p.innerHTML = linkHtml;
         envLinksDiv.appendChild(p);
       }
@@ -192,7 +193,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  refreshBtn.addEventListener("click", renderLinks);
   openOptionsBtn.addEventListener("click", () => chrome.runtime.openOptionsPage());
 
   renderLinks();

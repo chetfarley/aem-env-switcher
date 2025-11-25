@@ -42,9 +42,7 @@
   --btn-color--active:            var(--dark-gray-2);
   --btn-background-color--active: var(--electric-60);
   --btn-border-color--active:     var(--electric-20);
-
-
-  
+  /* danger*/
   --btn-danger-text-color: var(--white);
   --btn-danger-background-color: #d62828;
   --btn-danger-border-color: #b21f1f;
@@ -75,8 +73,16 @@ body {
 }
 
 /* Helpers */
-.mt-1 {
-  margin-block-start: var(--spacing-half);
+.my-1 {
+  margin-block: var(--spacing-1);
+}
+
+.mx-auto {
+  margin-inline: auto;
+}
+
+.w50 {
+  width: 50%;
 }
 
 .gap-1 {
@@ -92,7 +98,7 @@ body {
 h2 {
   color: var(--text-color--emphasis);
   font-size: 1rem;
-  margin: 0 0 var(--spacing-half) 0;
+  margin: 0;
   text-align: center;
 }
 
@@ -116,6 +122,7 @@ h2 {
   font-size: 0.75rem;
   align-self: center;
   margin-inline-end: var(--spacing-third);
+  flex-basis: 25%;
 }
 
 /* --- EnvLinks Buttons --- */
@@ -129,6 +136,7 @@ h2 {
   border-color: var(--btn-primary-border-color);
   color: var(--btn-primary-color);
   background-color: var(--btn-primary-background-color);
+  border-radius: var(--border-radius-topleft,0) var(--border-radius-topright,0) var(--border-radius-bottomright,0) var(--border-radius-bottomleft,0);
 }
 
 .buttongroup .button:hover {
@@ -137,11 +145,13 @@ h2 {
 }
 
 .buttongroup .button:first-of-type {
-  border-radius: var(--btn-border-radius) 0 0 var(--btn-border-radius);
+ --border-radius-topleft: var(--btn-border-radius);
+ --border-radius-bottomleft: var(--btn-border-radius);
 }
 
 .buttongroup .button:last-of-type {
-  border-radius: 0 var(--btn-border-radius) var(--btn-border-radius) 0;
+  --border-radius-topright: var(--btn-border-radius);
+ --border-radius-bottomright: var(--btn-border-radius);
 }
 
 .buttongroup .button.active {
@@ -204,8 +214,6 @@ form#envForm {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
-  width: 50%;
-  margin-inline: auto;
 }
 
 .env-block {
