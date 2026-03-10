@@ -1,9 +1,9 @@
 const defaultConfig = {
-  localhost: { author: "http://localhost:4502", publish: "http://localhost:3000" },
-  dev: { author: "", publish: "" },
-  qa: { author: "", publish: "" },
-  stage: { author: "", publish: "" },
-  prod: { author: "", publish: "" },
+  localhost: { author: "http://localhost:4502", publish: "http://localhost:3000", contentPrefix: "" },
+  dev: { author: "", publish: "", contentPrefix: "" },
+  qa: { author: "", publish: "", contentPrefix: "" },
+  stage: { author: "", publish: "", contentPrefix: "" },
+  prod: { author: "", publish: "", contentPrefix: "" },
 };
 
 const envOrder = ["localhost", "dev", "qa", "stage", "prod"]; // display order
@@ -18,6 +18,8 @@ function createEnvBlock(key, urls) {
     <input type="url" name="${key}-author" value="${urls.author}" placeholder="https://${key}-author.example.com">
     <label>Publish URL</label>
     <input type="url" name="${key}-publish" value="${urls.publish}" placeholder="https://${key}.example.com">
+    <label>Content Prefix</label>
+    <input type="text" name="${key}-contentPrefix" value="${urls.contentPrefix || ''}" placeholder="content/site/path">
     ${!["localhost", "dev", "qa", "stage", "prod"].includes(key)
       ? `<button type="button" class="removeEnvBtn" data-env="${key}">Remove</button>`
       : ""}
@@ -73,7 +75,64 @@ document.getElementById("envForm").addEventListener("submit", async (e) => {
   }
 
   await chrome.storage.sync.set({ envs });
-  alert("✅ Environments saved!");
+  alert("Environments saved!");
+});
+
+// Export configuration to JSON file
+document.getElementById("exportBtn").addEventListener("click", async () => {
+  const { envs } = await chrome.storage.sync.get("envs");
+  const config = envs || defaultConfig;
+  
+  const dataStr = JSON.stringify(config, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `aem-env-config-${new Date().toISOString().split('T')[0]}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  
+  alert("Configuration exported!");
+});
+
+// Import configuration from JSON file
+document.getElementById("importBtn").addEventListener("click", () => {
+  document.getElementById("importFile").click();
+});
+
+document.getElementById("importFile").addEventListener("change", async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  
+  try {
+    const text = await file.text();
+    const config = JSON.parse(text);
+    
+    // Validate that the imported config has the expected structure
+    if (typeof config !== "object" || config === null) {
+      throw new Error("Invalid configuration format");
+    }
+    
+    // Validate each environment has author and publish properties
+    for (const [env, urls] of Object.entries(config)) {
+      if (!urls.hasOwnProperty("author") || !urls.hasOwnProperty("publish")) {
+        throw new Error(`Environment "${env}" is missing required properties`);
+      }
+    }
+    
+    // Save to storage and re-render
+    await chrome.storage.sync.set({ envs: config });
+    renderInputs(config);
+    alert("Configuration imported successfully!");
+  } catch (error) {
+    alert(`Failed to import configuration: ${error.message}`);
+  }
+  
+  // Reset file input
+  e.target.value = "";
 });
 
 // Add custom environment

@@ -5,30 +5,36 @@
   --spacing-half: 0.5rlh;
   --spacing-1: 1rlh;
   --spacing-2: 2rlh;
-  /* colors */
-  --dark-gray-2: #242424;
-  --dark-gray-3: #333;
-  --dark-gray-4: #444;
-  --dark-gray-5: #555;
-  --dark-gray-4: #666;
-  --light-gray-e: #eee;
-  --white: #fff;
-  --electric-60: hsl(194, 70%, 58%);
-  --electric-20: hsl(194, 70%, 20%);
-  --electric-15: hsl(194, 70%, 15%);
-  --electric-10: hsl(194, 70%, 10%);
-
-  --body-background-color: #1e1e1e;
+  /* color palette */
+  --hue-base: 0;
+  --hue-offset: 188;
+  --dark-gray-1: hsl(var(--hue-base), 0%, 7%);
+  --dark-gray-2: hsl(var(--hue-base), 0%, 13%);
+  --dark-gray-3: hsl(var(--hue-base), 0%, 20%);
+  --dark-gray-4: hsl(var(--hue-base), 0%, 27%);
+  --dark-gray-5: hsl(var(--hue-base), 0%, 33%);
+  --dark-gray-4: hsl(var(--hue-base), 0%, 40%);
+  --light-gray-e: hsl(var(--hue-base), 0%, 93%);
+  --light-gray-b: hsl(var(--hue-base), 0%, 73%);
+  --light-gray-a: hsl(var(--hue-base), 0%, 67%);
+  --white: hsl(var(--hue-base), 0%, 100%);
+  
+  --electric-90: hsl(var(--hue-offset), 70%, 90%);
+  --electric-20: hsl(var(--hue-offset), 70%, 20%);
+  --electric-15: hsl(var(--hue-offset), 70%, 15%);
+  --electric-10: hsl(var(--hue-offset), 70%, 10%);
+  /* THEME */
+  --body-background-color:        var(--dark-gray-1);
   /* text */
-  --text-color--base: #f5f5f5;
-  --text-color--emphasis: #dfdfad;
+  --text-color--base:             var(--light-gray-a);
+  --text-color--emphasis:         var(--light-gray-e);
   /* links */
-  --link-color--base: #47bbdf;
-  --link-color--hover: var(--white);
+  --link-color--base:             var(--electric-90);
+  --link-color--hover:            var(--white);
   --link-background-color--hover: var(--dark-gray-3);
   /* buttons */
   /* primary */
-  --btn-primary-color:            var(--electric-60);
+  --btn-primary-color:            var(--electric-90);
   --btn-primary-background-color: var(--electric-20);
   --btn-primary-border-color:     var(--electric-10);
   --btn-primary-background-color--hover: var(--electric-15);
@@ -36,29 +42,27 @@
   --btn-text-color:               var(--light-gray-e);
   --btn-background-color:         var(--dark-gray-3);
   --btn-border-color:             var(--dark-gray-4);
-  --btn-background-color--hover:  var(--dark-gray-4);
-  --btn-border-color--hover:      var(--dark-gray-6);
+  --btn-background-color--hover:  var(--dark-gray-2);
+  --btn-border-color--hover:      var(--dark-gray-3);
   /* primary active*/  
   --btn-color--active:            var(--dark-gray-2);
-  --btn-background-color--active: var(--electric-60);
+  --btn-background-color--active: var(--electric-90);
   --btn-border-color--active:     var(--electric-20);
-
-
-  
+  /* danger*/
   --btn-danger-text-color: var(--white);
   --btn-danger-background-color: #d62828;
   --btn-danger-border-color: #b21f1f;
-  --btn-danger-background-color--hover: #e63946;
+  --btn-danger-background-color--hover: #a42731;
 
   --btn-border-radius: var(--spacing-third);
   /* section blocks */
   --block-border: var(--dark-gray-3);
-  --block-background-color: #242424;
+  --block-background-color: var(--dark-gray-2);
   /* forms */
-  --label-text-color: #bbb;
+  --label-text-color: var(--light-gray-b);
   --input-text-color: var(--light-gray-e);
   --input-border-color: var(--dark-gray-4);
-  --input-background-color: #2a2a2a;
+  --input-background-color: rgba(0,0,0,0.1);
 }
 
 /* --- Global Reset --- */
@@ -75,8 +79,16 @@ body {
 }
 
 /* Helpers */
-.mt-1 {
-  margin-block-start: var(--spacing-half);
+.my-1 {
+  margin-block: var(--spacing-1);
+}
+
+.mx-auto {
+  margin-inline: auto;
+}
+
+.w50 {
+  width: 50%;
 }
 
 .gap-1 {
@@ -92,7 +104,7 @@ body {
 h2 {
   color: var(--text-color--emphasis);
   font-size: 1rem;
-  margin: 0 0 var(--spacing-half) 0;
+  margin: 0;
   text-align: center;
 }
 
@@ -116,9 +128,17 @@ h2 {
   font-size: 0.75rem;
   align-self: center;
   margin-inline-end: var(--spacing-third);
+  flex-basis: 25%;
 }
 
 /* --- EnvLinks Buttons --- */
+#envLinks .buttons {
+  width: 80%;
+} 
+#envLinks .buttons > * {
+ width: 100%; 
+}
+
 .buttongroup .button {
   text-decoration: none;
   margin-inline: -0.5px;
@@ -129,6 +149,7 @@ h2 {
   border-color: var(--btn-primary-border-color);
   color: var(--btn-primary-color);
   background-color: var(--btn-primary-background-color);
+  border-radius: var(--border-radius-topleft,0) var(--border-radius-topright,0) var(--border-radius-bottomright,0) var(--border-radius-bottomleft,0);
 }
 
 .buttongroup .button:hover {
@@ -137,11 +158,13 @@ h2 {
 }
 
 .buttongroup .button:first-of-type {
-  border-radius: var(--btn-border-radius) 0 0 var(--btn-border-radius);
+ --border-radius-topleft: var(--btn-border-radius);
+ --border-radius-bottomleft: var(--btn-border-radius);
 }
 
 .buttongroup .button:last-of-type {
-  border-radius: 0 var(--btn-border-radius) var(--btn-border-radius) 0;
+  --border-radius-topright: var(--btn-border-radius);
+ --border-radius-bottomright: var(--btn-border-radius);
 }
 
 .buttongroup .button.active {
@@ -155,11 +178,6 @@ h2 {
 .buttons,
 .buttongroup {
   display: flex;
-}
-
-.buttons > *,
-.buttongroup > * {
- width: 100%; 
 }
 
 button, 
@@ -204,8 +222,6 @@ form#envForm {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-1);
-  width: 50%;
-  margin-inline: auto;
 }
 
 .env-block {
@@ -228,10 +244,12 @@ label {
   display: block;
   font-size: 0.75rem;
   color: var(--label-text-color);
-  margin-block: var(--spacing-half) var(--spacing-third);
+  margin-block: var(--spacing-1) var(--spacing-third);
+  font-weight: 600;
 }
 
-input[type="url"] {
+input[type="url"],
+input[type="text"] {
   width: 100%;
   padding: var(--spacing-third);
   font-size: 0.8rem;
@@ -247,8 +265,10 @@ input[type="url"] {
   border: 1px solid var(--btn-danger-border-color);
   color: var(--btn-danger-text-color);
   transition: background 0.2s;
+  margin-top: var(--spacing-1);
 }
 
 .removeEnvBtn:hover {
-  background: var(--btn-danger-background-color--hover);
+  background-color: var(--btn-danger-background-color--hover);
+  border-color: var(--btn-danger-background-color--hover);
 }

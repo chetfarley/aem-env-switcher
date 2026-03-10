@@ -6,7 +6,12 @@
 </head>
 <body>
   <h2>Environment Configuration</h2>
-  <form id="envForm">
+  <div class="buttons gap-1 w50 mx-auto my-1">
+    <button type="button" id="exportBtn">Export Config</button>
+    <button type="button" id="importBtn">Import Config</button>
+  </div>
+  <input type="file" id="importFile" accept=".json" style="display: none;" />
+  <form id="envForm" class="w50 mx-auto">
     <div id="envInputs"></div>
     <div class="buttons gap-1">
       <button type="button" id="addEnvBtn">+ Add Env</button>

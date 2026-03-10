@@ -16,15 +16,15 @@ This is a Chrome Extension (Manifest V3) for AEM developers that enables quick e
    ```javascript
    {
      envs: {
-       localhost: { author: "http://localhost:4502", publish: "http://localhost:3000" },
-       dev: { author: "...", publish: "..." }
+       localhost: { author: "http://localhost:4502", publish: "http://localhost:4503", contentPrefix: "" },
+       dev: { author: "...", publish: "...", contentPrefix: "/content/site" }
      }
    }
    ```
 
-2. **URL Detection**: `extractAemPath()` extracts content paths from AEM URLs using regex patterns like `/content/[^?#]*?\.html`
+2. **URL Detection**: `getShortPath()` extracts short paths from AEM URLs, handling both full /content/ paths and rewritten publish URLs
 
-3. **URL Transformation**: `transformUrl()` handles environment switching logic:
+3. **URL Construction**: `buildEnvironmentLinks()` constructs URLs for different modes using contentPrefix for path mapping
    - Detects current context (author/publish/preview) 
    - Localhost uses direct `/editor.html` paths
    - Non-localhost uses `/ui#/aem/editor.html` structure
@@ -41,13 +41,13 @@ This is a Chrome Extension (Manifest V3) for AEM developers that enables quick e
 The extension identifies current environment by matching URL prefixes against stored `author`/`publish` base URLs in the config.
 
 ### Content Path Extraction
-Uses regex `/\/content\/[^\?#]+\.html/` to extract AEM content paths that are preserved across environment switches.
+Extracts short paths from both full AEM URLs (/content/path.html) and rewritten publish URLs (/short/path), using contentPrefix to map between them.
 
 ## Development Patterns
 
 ### Chrome Extension APIs
 - `chrome.tabs.query()` for current tab detection
-- `chrome.tabs.create()` for opening new tabs (not replacing current)
+- `chrome.tabs.update()` for switching URLs in the same tab
 - `chrome.storage.sync` for cross-device environment persistence
 - `chrome.runtime.openOptionsPage()` for settings access
 
@@ -57,7 +57,7 @@ Uses regex `/\/content\/[^\?#]+\.html/` to extract AEM content paths that are pr
 - Event delegation for dynamically created elements
 
 ### Configuration Management
-- `defaultConfig` provides fallback environment structure
+- `defaultConfig` provides fallback environment structure with contentPrefix
 - Custom environments can be added/removed through options page
 - Environment display order controlled by `envOrder` array
 
@@ -73,11 +73,13 @@ Uses regex `/\/content\/[^\?#]+\.html/` to extract AEM content paths that are pr
 - Environment switching from various starting contexts
 - Custom environment addition/removal
 - Settings persistence across browser sessions
+- Switching between rewritten publish URLs and full AEM paths
+- Handling different content prefixes (language masters vs live sites)
 
 ## Code Conventions
 
 ### Error Handling
-- Try-catch blocks in URL parsing (`extractAemPath`)
+- Try-catch blocks in URL parsing (`getShortPath`)
 - Null checks for tab queries and URL operations
 - Graceful fallbacks for missing configuration
 

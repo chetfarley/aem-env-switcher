@@ -15,88 +15,62 @@ function createLinkSet(base, path) {
   };
 }
 
-// Extract the AEM content path from any Author or Publish URL
-function extractAemPath(url) {
+// Extract the short path from any Author or Publish URL
+function getShortPath(url, contentPrefix = "") {
   try {
     const decoded = decodeURIComponent(url);
-    const clean = decoded
+    let clean = decoded
       .replace(/.*(editor\.html|cf#)/, "")
       .replace(/[?#].*$/, "");
-    const match = clean.match(/\/content\/[^?#]*?\.html/);
-    return match ? match[0] : "";
+    let match = clean.match(/\/content\/[^?#]*?\.html/);
+    if (match) {
+      // Author/preview URL
+      const fullPath = match[0];
+      let shortPath = fullPath.replace(contentPrefix, '').replace(/^\//, '').replace(/\.html$/, '');
+      if (shortPath.startsWith('/')) shortPath = shortPath.slice(1);
+      return shortPath;
+    } else {
+      // Publish URL
+      const urlObj = new URL(decoded);
+      let path = urlObj.pathname;
+      if (path.endsWith('/')) path = path.slice(0, -1);
+      if (path.startsWith('/')) path = path.slice(1);
+      return path;
+    }
   } catch {
     return "";
   }
 }
 
-// --- Core Transform Logic ---
-function transformUrl(currentUrl, clickedUrl, envBase, linkType) {
-  const isAuthorTab = currentUrl.includes("editor.html");
-  const isPreviewTab = currentUrl.includes("wcmmode=disabled");
-  const isPublishTab = !isAuthorTab && !isPreviewTab;
 
-  let contentPathMatch = clickedUrl.match(/\/content\/[^\?#]+\.html/);
-  if (!contentPathMatch) return null;
-  const contentPath = contentPathMatch[0];
-
-  let newUrl;
-
-  switch (linkType) {
-    case "author":
-      if (!envBase.author) return null;
-      if (isAuthorTab || isPreviewTab || isPublishTab) {
-        // Localhost doesn't need /ui#/aem/
-        const isLocalhost = envBase.author.includes("localhost");
-        if (isLocalhost) {
-          newUrl = `${envBase.author}/editor.html${contentPath}`;
-        } else {
-          newUrl = `${envBase.author}/ui#/aem/editor.html${contentPath}`;
-        }
-      }
-      break;
-
-    case "publish":
-      if (!envBase.publish) return null;
-      if (isAuthorTab || isPublishTab || isPreviewTab) {
-        newUrl = `${envBase.publish}${contentPath}`;
-      }
-      break;
-
-    case "preview":
-      if (!envBase.author) return null;
-      if (isAuthorTab || isPreviewTab || isPublishTab) {
-        newUrl = `${envBase.author}${contentPath}?wcmmode=disabled`;
-      }
-      break;
-  }
-
-  return newUrl;
-}
 
 // Helper function to build environment links based on available URLs
-function buildEnvironmentLinks(key, base, path) {
+function buildEnvironmentLinks(key, base, shortPath) {
   const hasAuthor = base.author && base.author.trim() !== "";
   const hasPublish = base.publish && base.publish.trim() !== "";
+  const contentPrefix = base.contentPrefix || "";
   
   if (!hasAuthor && !hasPublish) return null;
   
   const links = [];
   
   if (hasAuthor) {
-    const authorUrl = base.author + path;
+    const fullPath = contentPrefix ? `/${contentPrefix}/${shortPath}.html` : `/${shortPath}.html`;
+    const isLocalhost = base.author.includes("localhost");
+    const authorUrl = isLocalhost ? `${base.author}/editor.html${fullPath}` : `${base.author}/ui#/aem/editor.html${fullPath}`;
     links.push(`<a class="button" href="#" data-env="${key}" data-type="author" data-url="${authorUrl}">Author</a>`);
     
     // Preview uses author URL with wcmmode=disabled
-    const previewUrl = base.author + path + "?wcmmode=disabled";
+    const previewUrl = `${base.author}${fullPath}?wcmmode=disabled`;
     links.push(`<a class="button" href="#" data-env="${key}" data-type="preview" data-url="${previewUrl}">Preview</a>`);
   }
   
   if (hasPublish) {
-    const publishUrl = base.publish + path;
+    const publishUrl = `${base.publish}/${shortPath}`;
     links.push(`<a class="button" href="#" data-env="${key}" data-type="publish" data-url="${publishUrl}">Publish</a>`);
   }
   
-  return `<strong>${key.toUpperCase()}</strong>${links.join("")}`;
+  return `<strong>${key.toUpperCase()}</strong><div class="buttons">${links.join("")}</div>`;
 }
 
 // --- Main UI Logic ---
@@ -114,8 +88,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     currentUrlDiv.textContent = `Current: ${currentUrl}`;
     if (!currentUrl.includes(".com") && !currentUrl.includes("localhost")) return;
 
-    const path = extractAemPath(currentUrl);
-
     // Load user config
     const { envs } = await chrome.storage.sync.get("envs");
     const config = envs || {};
@@ -123,9 +95,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Detect current environment & type
     let currentEnvKey = null;
     let currentType = null;
+    let currentContentPrefix = "";
     for (const [key, base] of Object.entries(config)) {
       if (base.author && currentUrl.startsWith(base.author)) {
         currentEnvKey = key;
+        currentContentPrefix = base.contentPrefix || "";
         if (currentUrl.includes("editor.html")) currentType = "author";
         else if (currentUrl.includes("wcmmode=disabled")) currentType = "preview";
         else currentType = "publish";
@@ -133,11 +107,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
       if (base.publish && currentUrl.startsWith(base.publish)) {
         currentEnvKey = key;
+        currentContentPrefix = base.contentPrefix || "";
         if (currentUrl.includes("wcmmode=disabled")) currentType = "preview";
         else currentType = "publish";
         break;
       }
     }
+
+    const shortPath = getShortPath(currentUrl, currentContentPrefix);
 
     // Render environment links - only for environments with configured URLs
     // First render ordered environments
@@ -145,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       const base = config[key];
       if (!base) continue;
       
-      const linkHtml = buildEnvironmentLinks(key, base, path);
+      const linkHtml = buildEnvironmentLinks(key, base, shortPath);
       if (linkHtml) {
         const p = document.createElement("p");
         p.classList.add('buttongroup');
@@ -159,9 +136,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (envOrder.includes(key)) continue; // Skip already rendered
       if (!base) continue;
       
-      const linkHtml = buildEnvironmentLinks(key, base, path);
+      const linkHtml = buildEnvironmentLinks(key, base, shortPath);
       if (linkHtml) {
         const p = document.createElement("p");
+        p.classList.add('buttongroup');
         p.innerHTML = linkHtml;
         envLinksDiv.appendChild(p);
       }
@@ -179,20 +157,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       a.addEventListener("click", async (e) => {
         e.preventDefault();
-        const clickedUrl = e.target.getAttribute("data-url");
-        const envKey = e.target.getAttribute("data-env");
-        const linkType = e.target.getAttribute("data-type");
-        const envBase = config[envKey];
-        const currentTabUrl = await getCurrentTabUrl();
-        const newUrl = transformUrl(currentTabUrl, clickedUrl, envBase, linkType);
+        const newUrl = e.target.getAttribute("data-url");
         if (newUrl) {
-          chrome.tabs.create({ url: newUrl }); // open in new tab
+          const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+          chrome.tabs.update(tab.id, { url: newUrl });
         }
       });
     });
   }
 
-  refreshBtn.addEventListener("click", renderLinks);
   openOptionsBtn.addEventListener("click", () => chrome.runtime.openOptionsPage());
 
   renderLinks();
