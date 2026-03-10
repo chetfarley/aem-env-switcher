@@ -4,10 +4,12 @@ An extension for AEM developers and authors to quickly switch between Author, Pr
 
 ## Description
 
-AEM Environment Switcher streamlines dev workflow by simplifying navigation between different AEM environments and contexts. Whether you're testing content on localhost, validating changes in QA, or comparing behavior across Author and Publish instances, this extension eliminates the manual URL manipulation typically required.
+AEM Environment Switcher streamlines dev workflow by simplifying navigation between different AEM environments and contexts. Whether you're testing content on localhost, validating changes in QA, or comparing behavior across Author and Publish instances, this extension eliminates the manual URL manipulation typically required. It supports URL rewriting on publish instances and different content path structures (e.g., language masters vs. live sites).
 
 **Current Features:**
 - **One-Click Environment Switching**: Jump between localhost, dev, qa, stage, and production environments while preserving your current content path
+- **URL Rewriting Support**: Handles publish URLs that are rewritten (e.g., /en-us/events instead of /content/site/en-us/events.html)
+- **Flexible Content Paths**: Configure different content prefixes for environments with varying path structures
 - **Custom Environments**: Add and configure your own environment URLs through the settings page
 - **Data Security**:  All Environment configurations are only stored in the local system and aren't uploaded to any server.
 
@@ -27,6 +29,7 @@ AEM Environment Switcher streamlines dev workflow by simplifying navigation betw
 2. Configure your environment URLs:
    - **Author URL**: The base URL for your AEM author instance (e.g., `http://localhost:4502`)
    - **Publish URL**: The base URL for your publish instance (e.g., `http://localhost:4503`)
+   - **Content Prefix**: The path prefix for content in AEM (e.g., `/content/komatsu/websites/na` for live sites, or `/content/komatsu/language-masters` for language masters). Leave empty for localhost.
 3. Add custom environments using the "Add Environment" button
 4. Remove environments using the "Remove" button next to each environment
 5. Click "Save" to persist your changes

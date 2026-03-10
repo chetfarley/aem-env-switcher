@@ -1,9 +1,9 @@
 const defaultConfig = {
-  localhost: { author: "http://localhost:4502", publish: "http://localhost:3000" },
-  dev: { author: "", publish: "" },
-  qa: { author: "", publish: "" },
-  stage: { author: "", publish: "" },
-  prod: { author: "", publish: "" },
+  localhost: { author: "http://localhost:4502", publish: "http://localhost:3000", contentPrefix: "" },
+  dev: { author: "", publish: "", contentPrefix: "" },
+  qa: { author: "", publish: "", contentPrefix: "" },
+  stage: { author: "", publish: "", contentPrefix: "" },
+  prod: { author: "", publish: "", contentPrefix: "" },
 };
 
 const envOrder = ["localhost", "dev", "qa", "stage", "prod"]; // display order
@@ -18,6 +18,8 @@ function createEnvBlock(key, urls) {
     <input type="url" name="${key}-author" value="${urls.author}" placeholder="https://${key}-author.example.com">
     <label>Publish URL</label>
     <input type="url" name="${key}-publish" value="${urls.publish}" placeholder="https://${key}.example.com">
+    <label>Content Prefix</label>
+    <input type="text" name="${key}-contentPrefix" value="${urls.contentPrefix || ''}" placeholder="content/site/path">
     ${!["localhost", "dev", "qa", "stage", "prod"].includes(key)
       ? `<button type="button" class="removeEnvBtn" data-env="${key}">Remove</button>`
       : ""}
