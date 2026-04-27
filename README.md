@@ -29,7 +29,7 @@ AEM Environment Switcher streamlines dev workflow by simplifying navigation betw
 2. Configure your environment URLs:
    - **Author URL**: The base URL for your AEM author instance (e.g., `http://localhost:4502`)
    - **Publish URL**: The base URL for your publish instance (e.g., `http://localhost:4503`)
-   - **Content Prefix**: The path prefix for content in AEM (e.g., `/content/komatsu/websites/na` for live sites, or `/content/komatsu/language-masters` for language masters). Leave empty for localhost.
+   - **Content Prefix**: The path prefix for content in AEM (e.g., `/content/root/websites/na` for live sites, or `/content/root/language-masters` for language masters). Leave empty for localhost.
 3. Add custom environments using the "Add Environment" button
 4. Remove environments using the "Remove" button next to each environment
 5. Click "Save" to persist your changes

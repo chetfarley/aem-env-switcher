@@ -1,0 +1,17 @@
+/* ==========================================================================
+   _reset.css
+   Minimal global reset. Keeps only what's needed — no opinionated resets
+   that fight MD3 web components (they have their own shadow-DOM resets).
+   ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Google Sans', system-ui, -apple-system, Roboto, sans-serif;
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,122 @@
+/* ==========================================================================
+   _popup.css
+   Layout for the extension popup window: toolbar + context bar.
+   ========================================================================== */
+
+/* ── Popup body ───────────────────────────────────────────────────────────── */
+
+body.popup {
+  width: 720px;
+  min-height: 72px;
+  overflow: hidden; /* prevent scrollbar flash on initial render */
+}
+
+/* ── Toolbar ──────────────────────────────────────────────────────────────── */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 32px 12px;
+  background: var(--md-sys-color-surface-container-low);
+  height: 72px;
+}
+
+/* Environment selector — fixed width, vertically centred */
+.toolbar__env {
+  flex: 0 0 148px;
+  display: flex;
+  align-items: center;
+}
+
+.toolbar__env md-filled-select {
+  width: 148px;
+  --md-filled-select-text-field-container-height: 48px;
+}
+
+/* Instance buttons — grow to fill remaining space, equal-width */
+.toolbar__actions {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Published button needs a relative wrapper for md-menu anchor positioning */
+.published-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+/*
+  Dropdown mode (.has-dropdown added by JS when page is a language-master).
+  The arrow icon is hidden by default; CSS reveals it only in this mode
+  so we never fight the shadow-DOM to hide it.
+*/
+.published-anchor:not(.has-dropdown) md-icon[slot="icon"] {
+  display: none;
+}
+
+/* Widen the button slightly to accommodate the trailing icon comfortably */
+.published-anchor.has-dropdown .instance-btn {
+  min-width: 138px;
+}
+
+/* Base size shared by all three instance buttons */
+.instance-btn {
+  min-width: 112px;
+}
+
+/* Vertical divider separating actions from meta controls */
+.toolbar__divider {
+  width: 1px;
+  height: 100cqw;
+  background: var(--md-sys-color-outline-variant);
+  flex-shrink: 0;
+  border-radius: 1px;
+}
+
+/* Hamburger + close */
+.toolbar__meta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Context bar ──────────────────────────────────────────────────────────── */
+
+.context-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 4px 14px 6px;
+  background: var(--md-sys-color-surface);
+  font-size: 11px;
+  color: var(--md-sys-color-on-surface-variant);
+  min-height: 22px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.context-bar__type {
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--md-sys-color-on-surface-variant);
+  flex-shrink: 0;
+}
+
+/* Separator dot shown only when both type and URL have content */
+.context-bar__type:not(:empty) + .context-bar__url:not(:empty)::before {
+  content: "·";
+  margin-right: 6px;
+  opacity: 0.5;
+}
+
+.context-bar__url {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.65;
+  min-width: 0;
+}

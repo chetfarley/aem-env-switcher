@@ -18,9 +18,12 @@ rm -rf "$DIST"
 mkdir -p "$DIST"
 
 echo "Copying shared files..."
-cp "$ROOT/style.css"    "$DIST/"
-cp "$ROOT/popup.js"     "$DIST/"
-cp "$ROOT/options.js"   "$DIST/"
+cp "$ROOT/style.css"      "$DIST/"
+cp "$ROOT/popup.js"       "$DIST/"
+cp "$ROOT/options.js"     "$DIST/"
+# Bundled JS (built by: npm run build)
+cp "$ROOT/md-bundle.js"   "$DIST/"
+cp "$ROOT/sidepanel.js"   "$DIST/"
 # Copy icon if it exists
 [ -f "$ROOT/icon.png" ] && cp "$ROOT/icon.png" "$DIST/"
 
@@ -34,6 +37,9 @@ echo "Generating HTML files (injecting browser-compat.js shim into root HTML fil
 # so the shim remaps `chrome` before any extension JS runs.
 sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
   "$ROOT/popup.html" > "$DIST/popup.html"
+
+sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
+  "$ROOT/sidepanel.html" > "$DIST/sidepanel.html"
 
 sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
   "$ROOT/options.html" > "$DIST/options.html"

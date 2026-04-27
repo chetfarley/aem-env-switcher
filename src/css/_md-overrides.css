@@ -1,0 +1,79 @@
+/* ==========================================================================
+   _md-overrides.css
+   Custom token overrides for @material/web components.
+
+   MD3 components are styled via CSS custom properties exposed on the element.
+   We never use !important or override shadow-DOM internals directly — only
+   the documented token API.
+
+   Reference: https://material-web.dev/components/
+   ========================================================================== */
+
+/* ── Instance action buttons ─────────────────────────────────────────────────
+   Three states managed by JS via class toggles:
+     .instance-btn--active    → user is currently on this instance + env
+     .instance-btn--available → can navigate here; not currently active
+     [disabled]               → n/a per requirements matrix
+   ─────────────────────────────────────────────────────────────────────────── */
+
+md-filled-button.instance-btn--active {
+  --md-filled-button-container-color:           var(--md-sys-color-primary);
+  --md-filled-button-label-text-color:          var(--md-sys-color-on-primary);
+  --md-filled-button-hover-state-layer-color:   var(--md-sys-color-on-primary);
+  --md-filled-button-pressed-state-layer-color: var(--md-sys-color-on-primary);
+}
+
+md-filled-button.instance-btn--available {
+  --md-filled-button-container-color:           var(--md-sys-color-secondary-container);
+  --md-filled-button-label-text-color:          var(--md-sys-color-on-secondary-container);
+  --md-filled-button-hover-state-layer-color:   var(--md-sys-color-on-secondary-container);
+  --md-filled-button-pressed-state-layer-color: var(--md-sys-color-on-secondary-container);
+}
+
+/* MD3 already styles disabled buttons; this just prevents cursor confusion */
+md-filled-button[disabled] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── Config hamburger menu ───────────────────────────────────────────────── */
+
+#config-menu md-icon {
+  color: var(--md-sys-color-primary);
+}
+
+/* ── Published live-copy dropdown ───────────────────────────────────────── */
+
+#published-menu md-menu-item {
+  min-width: 180px;
+}
+
+/* Globe icon tinted to primary */
+#published-menu md-menu-item md-icon[slot="start"] {
+  color: var(--md-sys-color-primary);
+  font-size: 18px;
+}
+
+/* Empty state item — muted, non-interactive */
+#published-menu .published-menu__empty {
+  color: var(--md-sys-color-on-surface-variant);
+  font-style: italic;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ── All menus — ensure they layer above the toolbar ────────────────────── */
+
+md-menu {
+  z-index: 100;
+}
+
+/* ── Icon buttons ────────────────────────────────────────────────────────── */
+
+md-icon-button {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+md-icon-button:hover {
+  color: var(--md-sys-color-on-surface);
+}

@@ -1,0 +1,21 @@
+{
+  "name": "aem-env-switcher",
+  "version": "2.0.0",
+  "description": "Chrome extension for AEM environment switching with i18n support",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "watch": "node build.js --watch",
+    "package": "node build.js --package-only"
+  },
+  "dependencies": {
+    "@material/web": "^2.2.0"
+  },
+  "devDependencies": {
+    "cssnano": "^7.1.7",
+    "esbuild": "^0.25.0",
+    "postcss": "^8.5.10",
+    "postcss-import": "^16.1.1"
+  }
+}

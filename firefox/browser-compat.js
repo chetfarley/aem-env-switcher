@@ -12,6 +12,10 @@
  * preferring `browser` when it is available (Firefox), and falling back to the
  * native `chrome` global (Chrome/Edge). Because all of the extension's JS
  * already uses `await chrome.*`, no other files need to change.
+ *
+ * Storage keys used by this extension (chrome.storage.sync):
+ *   envs          — Record<string, { author: string, publish: string }>
+ *   i18nMappings  — Array<{ masterPath, liveCopies: [{ label, path, maskedPath }] }>
  */
 (function () {
   if (typeof browser !== "undefined" && typeof chrome === "undefined") {
