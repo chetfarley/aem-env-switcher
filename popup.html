@@ -11,9 +11,10 @@
     md-bundle.js is built from src/md-imports.js via:  npm run build
     It is a local ESM file — no CDN, no CSP issues.
   -->
-  <script type="module" src="md-bundle.js"></script>
+  <script type="module" src="swc-bundle.js"></script>
 </head>
 <body class="popup">
+<sp-theme id="sp-theme" scale="medium" color="light">
 
   <!-- ── Toolbar ─────────────────────────────────────────────────────────── -->
   <div class="toolbar" id="toolbar" role="toolbar" aria-label="AEM Environment Switcher">
@@ -100,5 +101,6 @@
   -->
   <script src="popup.js" defer></script>
 
+</sp-theme>
 </body>
 </html>

@@ -480,6 +480,13 @@ function sortedEnvEntries(envs) {
   let _activeEnv   = null;   // env key that the current tab URL matched
   let _selectedEnv = null;   // env key currently selected in the dropdown
 
+  // ── Theme (system dark/light via sp-theme) ────────────────────────────────
+  const spTheme = document.getElementById("sp-theme");
+  const _mq = window.matchMedia("(prefers-color-scheme: dark)");
+  function _applyTheme(e) { spTheme.color = e.matches ? "dark" : "light"; }
+  _applyTheme(_mq);
+  _mq.addEventListener("change", _applyTheme);
+
   // ── Bootstrap ───────────────────────────────────────────────────────────────
   _tab = await getCurrentTab();
   if (!_tab?.url) return;
