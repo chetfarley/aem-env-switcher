@@ -27,13 +27,13 @@ async function init() {
   _applyTheme(_mq);
   _mq.addEventListener("change", _applyTheme);
 
-  await customElements.whenDefined("md-tabs");
+  await customElements.whenDefined("sp-tabs");
 
-  // Tab switching — show/hide panels on md-tabs change event.
-  document.getElementById("sp-tabs").addEventListener("change", (e) => {
-    document.querySelectorAll(".sp-panel").forEach(p => p.classList.add("sp-panel--hidden"));
-    const panelId = e.target.activeTab?.getAttribute("aria-controls");
-    if (panelId) document.getElementById(panelId)?.classList.remove("sp-panel--hidden");
+  // sp-tabs manages sp-tab-panel visibility natively via the `selected` / `value` attributes.
+  // No manual show/hide logic needed — just react to the change event if future work needs it.
+  // e.target.selected gives the value string of the newly selected tab.
+  document.getElementById("sp-tabs").addEventListener("change", (_e) => {
+    // Reserved for future per-tab side-effects (e.g. lazy loading).
   });
 
   // Wire save buttons
@@ -175,38 +175,38 @@ function appendEnvCard({ key, config, isBuiltin, isNew }) {
     <div class="env-card__header">
       ${isBuiltin
         ? `<span class="env-card__name">${_cap(key)}</span>`
-        : `<md-outlined-text-field
+        : `<sp-textfield
              class="env-card__name-input"
              label="Name"
              value="${_esc(key)}"
              maxlength="32"
-             supporting-text="Letters, numbers, - _ only"
-           ></md-outlined-text-field>`
+             help-text="Letters, numbers, - _ only"
+           ></sp-textfield>`
       }
       ${!isBuiltin
-        ? `<md-icon-button class="env-card__remove" type="button" title="Remove">
-             <md-icon>delete</md-icon>
-           </md-icon-button>`
+        ? `<sp-action-button class="env-card__remove" quiet type="button" title="Remove">
+             <sp-icon-delete slot="icon"></sp-icon-delete>
+           </sp-action-button>`
         : ""
       }
     </div>
     <div class="env-card__fields">
-      <md-outlined-text-field
+      <sp-textfield
         class="env-card__author"
         type="url"
         label="Author URL"
         value="${_esc(config.author || "")}"
         placeholder="https://author.example.com"
-        supporting-text="No trailing slash"
-      ></md-outlined-text-field>
-      <md-outlined-text-field
+        help-text="No trailing slash"
+      ></sp-textfield>
+      <sp-textfield
         class="env-card__publish"
         type="url"
         label="Publish URL"
         value="${_esc(config.publish || "")}"
         placeholder="https://www.example.com"
-        supporting-text="No trailing slash"
-      ></md-outlined-text-field>
+        help-text="No trailing slash"
+      ></sp-textfield>
     </div>
   `;
 
@@ -281,25 +281,31 @@ function appendLmCard({ masterPath, liveCopies }) {
   const header = document.createElement("div");
   header.className = "lm-card__header";
 
-  const pathField = document.createElement("md-outlined-text-field");
+  const pathField = document.createElement("sp-textfield");
   pathField.className = "lm-card__path";
   pathField.setAttribute("label", "Language Master JCR Path");
   pathField.setAttribute("value", _esc(masterPath || ""));
   pathField.setAttribute("placeholder", "/content/site/language-masters/en-us");
-  pathField.setAttribute("supporting-text", "Full JCR path — no trailing slash");
+  pathField.setAttribute("help-text", "Full JCR path — no trailing slash");
 
-  const collapseBtn = document.createElement("md-icon-button");
+  const collapseBtn = document.createElement("sp-action-button");
   collapseBtn.className = "lm-card__collapse";
+  collapseBtn.setAttribute("quiet", "");
   collapseBtn.setAttribute("type", "button");
   collapseBtn.setAttribute("title", "Toggle live copies");
   collapseBtn.setAttribute("aria-expanded", "true");
-  collapseBtn.innerHTML = `<md-icon>expand_less</md-icon>`;
+  const _collapseIcon = document.createElement("sp-icon-chevron-down");
+  _collapseIcon.setAttribute("slot", "icon");
+  collapseBtn.appendChild(_collapseIcon);
 
-  const removeBtn = document.createElement("md-icon-button");
+  const removeBtn = document.createElement("sp-action-button");
   removeBtn.className = "lm-card__remove";
+  removeBtn.setAttribute("quiet", "");
   removeBtn.setAttribute("type", "button");
   removeBtn.setAttribute("title", "Remove Language Master");
-  removeBtn.innerHTML = `<md-icon>delete</md-icon>`;
+  const _removeIcon = document.createElement("sp-icon-delete");
+  _removeIcon.setAttribute("slot", "icon");
+  removeBtn.appendChild(_removeIcon);
 
   header.append(pathField, collapseBtn, removeBtn);
 
@@ -311,17 +317,28 @@ function appendLmCard({ masterPath, liveCopies }) {
   lcList.className = "lc-list";
   body.appendChild(lcList);
 
-  const addLcBtn = document.createElement("md-text-button");
+  const addLcBtn = document.createElement("sp-button");
   addLcBtn.className = "lm-card__add-lc";
   addLcBtn.setAttribute("type", "button");
-  addLcBtn.innerHTML = `<md-icon slot="icon">add</md-icon> Add Live Copy`;
+  addLcBtn.setAttribute("variant", "secondary");
+  addLcBtn.setAttribute("quiet", "");
+  addLcBtn.setAttribute("size", "m");
+  const _addIcon = document.createElement("sp-icon-add");
+  _addIcon.setAttribute("slot", "icon");
+  addLcBtn.appendChild(_addIcon);
+  addLcBtn.append(" Add Live Copy");
   body.appendChild(addLcBtn);
 
   // ── Events ──
   collapseBtn.addEventListener("click", () => {
     const collapsed = body.classList.toggle("lm-card__body--collapsed");
     collapseBtn.setAttribute("aria-expanded", String(!collapsed));
-    collapseBtn.querySelector("md-icon").textContent = collapsed ? "expand_more" : "expand_less";
+    // Swap icon element — sp-icon-* can't change via textContent.
+    const oldIcon = collapseBtn.querySelector("[slot='icon']");
+    if (oldIcon) oldIcon.remove();
+    const newIcon = document.createElement(collapsed ? "sp-icon-chevron-right" : "sp-icon-chevron-down");
+    newIcon.setAttribute("slot", "icon");
+    collapseBtn.appendChild(newIcon);
   });
 
   removeBtn.addEventListener("click", () => {
@@ -352,31 +369,34 @@ function makeLcRow({ label, path, maskedPath }) {
   const row = document.createElement("div");
   row.className = "lc-row";
 
-  const labelField = document.createElement("md-outlined-text-field");
+  const labelField = document.createElement("sp-textfield");
   labelField.className = "lc-row__label";
   labelField.setAttribute("label", "Label");
   labelField.setAttribute("value", _esc(label || ""));
-  labelField.setAttribute("placeholder", "NA – English (US)");
+  labelField.setAttribute("placeholder", "NA \u2013 English (US)");
   labelField.setAttribute("maxlength", "64");
 
-  const pathField = document.createElement("md-outlined-text-field");
+  const pathField = document.createElement("sp-textfield");
   pathField.className = "lc-row__path";
   pathField.setAttribute("label", "Live Copy JCR Path");
   pathField.setAttribute("value", _esc(path || ""));
   pathField.setAttribute("placeholder", "/content/site/websites/na/en-us");
 
-  const maskedField = document.createElement("md-outlined-text-field");
+  const maskedField = document.createElement("sp-textfield");
   maskedField.className = "lc-row__masked";
   maskedField.setAttribute("label", "Masked Path (optional)");
   maskedField.setAttribute("value", _esc(maskedPath || ""));
   maskedField.setAttribute("placeholder", "/en-us");
-  maskedField.setAttribute("supporting-text", "Leave blank to auto-derive");
+  maskedField.setAttribute("help-text", "Leave blank to auto-derive");
 
-  const removeBtn = document.createElement("md-icon-button");
+  const removeBtn = document.createElement("sp-action-button");
   removeBtn.className = "lc-row__remove";
+  removeBtn.setAttribute("quiet", "");
   removeBtn.setAttribute("type", "button");
   removeBtn.setAttribute("title", "Remove Live Copy");
-  removeBtn.innerHTML = `<md-icon>remove_circle_outline</md-icon>`;
+  const _lcRemoveIcon = document.createElement("sp-icon-remove");
+  _lcRemoveIcon.setAttribute("slot", "icon");
+  removeBtn.appendChild(_lcRemoveIcon);
   removeBtn.addEventListener("click", () => row.remove());
 
   row.append(labelField, pathField, maskedField, removeBtn);
@@ -432,17 +452,23 @@ async function saveI18n() {
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function _showStatus(id, type, msg) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent  = msg;
-  el.dataset.type = type; // "success" | "error"
+  const container = document.getElementById(id);
+  if (!container) return;
+  // Remove any existing toast first.
+  container.innerHTML = "";
+  const toast = document.createElement("sp-toast");
+  // Spectrum toast variants: "positive" = success, "negative" = error.
+  toast.setAttribute("variant", type === "error" ? "negative" : "positive");
+  toast.setAttribute("open", "");
+  toast.setAttribute("timeout", "5000");
+  toast.textContent = msg;
+  container.appendChild(toast);
 }
 
 function _clearStatus(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent  = "";
-  el.dataset.type = "";
+  const container = document.getElementById(id);
+  if (!container) return;
+  container.innerHTML = "";
 }
 
 function _normPath(p) {

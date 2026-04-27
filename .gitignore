@@ -2,6 +2,8 @@ node_modules/
 
 # Build outputs — regenerate with: npm run build
 swc-bundle.js
+md-bundle.js
+sidepanel.js
 style.css
 style.css.map
 
