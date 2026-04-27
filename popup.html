@@ -3,14 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>AEM Env Switcher</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block">
   <link rel="stylesheet" href="style.css">
-  <!--
-    md-bundle.js is built from src/md-imports.js via:  npm run build
-    It is a local ESM file — no CDN, no CSP issues.
-  -->
   <script type="module" src="swc-bundle.js"></script>
 </head>
 <body class="popup">
@@ -21,54 +14,53 @@
 
     <!-- Environment selector -->
     <div class="toolbar__env">
-      <md-filled-select id="envSelect" label="Environment">
+      <sp-picker id="envSelect" label="Environment" size="m">
         <!-- Populated dynamically by popup.js -->
-      </md-filled-select>
+      </sp-picker>
     </div>
 
     <!-- Instance action buttons -->
     <div class="toolbar__actions" role="group" aria-label="View instance">
-      <md-filled-button id="btn-editor" class="instance-btn">
+      <sp-button id="btn-editor" class="instance-btn" variant="secondary" size="m">
         Editor
-      </md-filled-button>
+      </sp-button>
 
-      <md-filled-button id="btn-preview" class="instance-btn">
+      <sp-button id="btn-preview" class="instance-btn" variant="secondary" size="m">
         Preview
-      </md-filled-button>
+      </sp-button>
 
       <!-- Published: direct link OR dropdown for language-master pages -->
       <div class="published-anchor">
-        <md-filled-button
+        <sp-button
           id="btn-published"
           class="instance-btn"
+          variant="secondary"
+          size="m"
           aria-haspopup="menu"
           aria-expanded="false"
         >
           Published
           <!--
-            The arrow icon lives in slot="icon" with trailing-icon on the button.
-            JS adds/removes the .has-dropdown class on .published-anchor;
-            CSS uses that to show/hide the icon and stretch the button width.
+            JS adds/removes .has-dropdown on .published-anchor.
+            CSS shows/hides the chevron icon via that class.
           -->
-          <md-icon slot="icon" aria-hidden="true">arrow_drop_down</md-icon>
-        </md-filled-button>
+          <sp-icon-chevron-down slot="icon" aria-hidden="true"></sp-icon-chevron-down>
+        </sp-button>
         <!--
-          anchor/anchorElement set via JS — the HTML `anchor` attribute is
-          deprecated in newer @material/web builds.
-          menu-corner / anchor-corner position the menu below-start of the button.
+          sp-overlay + sp-popover replace md-menu.
+          trigger / anchorElement set via JS; open controlled via .open property.
         -->
-        <md-menu
+        <sp-popover
           id="published-menu"
-          positioning="fixed"
-          anchor-corner="end-start"
-          menu-corner="start-start"
-          x-offset="0"
-          y-offset="4"
           role="menu"
           aria-label="Published live copies"
+          placement="bottom-start"
+          tip
         >
-          <!-- Populated dynamically for language-master pages -->
-        </md-menu>
+          <sp-menu>
+            <!-- Populated dynamically for language-master pages -->
+          </sp-menu>
+        </sp-popover>
       </div>
     </div>
 
@@ -77,13 +69,13 @@
 
     <!-- Settings + close -->
     <div class="toolbar__meta">
-      <md-icon-button id="btn-menu" title="Settings">
-        <md-icon>settings</md-icon>
-      </md-icon-button>
+      <sp-action-button id="btn-menu" quiet title="Settings">
+        <sp-icon-settings slot="icon"></sp-icon-settings>
+      </sp-action-button>
 
-      <md-icon-button id="btn-close" title="Close">
-        <md-icon>close</md-icon>
-      </md-icon-button>
+      <sp-action-button id="btn-close" quiet title="Close">
+        <sp-icon-close slot="icon"></sp-icon-close>
+      </sp-action-button>
     </div>
 
   </div>
@@ -96,8 +88,7 @@
   </div>
 
   <!--
-    popup.js is loaded with defer so it executes after the module (md-bundle.js)
-    has already registered the custom elements. No DOMContentLoaded needed.
+    popup.js runs after swc-bundle.js has registered all custom elements.
   -->
   <script src="popup.js" defer></script>
 
