@@ -458,8 +458,8 @@ function sortedEnvEntries(envs) {
 
 (async function initPopup() {
 
-  // Extra safety: wait for the select to be defined in case of timing edge cases.
-  await customElements.whenDefined("md-filled-select");
+  // Extra safety: wait for sp-picker to be defined before accessing it.
+  await customElements.whenDefined("sp-picker");
 
   // ── DOM refs ────────────────────────────────────────────────────────────────
   const envSelect      = document.getElementById("envSelect");
@@ -503,7 +503,7 @@ function sortedEnvEntries(envs) {
 
   // Must be set before renderActions() calls enablePublishedDropdown.
   const publishedAnchor = btnPublished.closest(".published-anchor");
-  publishedMenu.anchorElement = btnPublished;
+  // sp-popover positioning is controlled by placement attribute + CSS — no anchorElement needed.
 
   populateEnvDropdown();
   renderActions();
@@ -535,9 +535,10 @@ function sortedEnvEntries(envs) {
 
     const entries = sortedEnvEntries(_envs);
     if (entries.length === 0) {
-      const opt = document.createElement("md-select-option");
+      const opt = document.createElement("sp-menu-item");
       opt.value = "";
-      opt.innerHTML = `<div slot="headline">No environments configured</div>`;
+      opt.textContent = "No environments configured";
+      opt.disabled = true;
       envSelect.appendChild(opt);
       return;
     }
@@ -545,10 +546,9 @@ function sortedEnvEntries(envs) {
     let firstKey = null;
     for (const [key] of entries) {
       if (!firstKey) firstKey = key;
-      const opt = document.createElement("md-select-option");
+      const opt = document.createElement("sp-menu-item");
       opt.value = key;
-      opt.innerHTML = `<div slot="headline">${key.charAt(0).toUpperCase() + key.slice(1)}</div>`;
-      if (key === _selectedEnv) opt.selected = true;
+      opt.textContent = key.charAt(0).toUpperCase() + key.slice(1);
       envSelect.appendChild(opt);
     }
 
@@ -557,14 +557,8 @@ function sortedEnvEntries(envs) {
       _selectedEnv = firstKey;
     }
 
-    // md-filled-select processes its slotted options asynchronously after
-    // connectedCallback. Setting value synchronously is ignored because the
-    // internal listbox isn't ready yet. Wait for the element's updateComplete
-    // promise (one Lit render cycle) before assigning value.
-    const target = _selectedEnv;
-    envSelect.updateComplete.then(() => {
-      envSelect.value = target;
-    });
+    // Set picker value after options are in the DOM.
+    envSelect.value = _selectedEnv;
   }
 
   // ── Action buttons ──────────────────────────────────────────────────────────
@@ -615,8 +609,8 @@ function sortedEnvEntries(envs) {
   function setBtn(btn, action, isActive) {
     const available = action !== null && action !== undefined;
     btn.disabled = !available;
-    btn.classList.toggle("instance-btn--active",    isActive);
-    btn.classList.toggle("instance-btn--available", available && !isActive);
+    // Spectrum uses variant attribute for visual state — no CSS class toggling needed.
+    btn.setAttribute("variant", isActive ? "accent" : "secondary");
   }
 
   // ── Published dropdown helpers ──────────────────────────────────────────────
@@ -645,7 +639,6 @@ function sortedEnvEntries(envs) {
    */
   function enablePublishedDropdown(options) {
     publishedAnchor.classList.add("has-dropdown");
-    btnPublished.setAttribute("trailing-icon", "");
     btnPublished.setAttribute("aria-haspopup", "menu");
 
     populatePublishedMenu(options);
@@ -666,7 +659,6 @@ function sortedEnvEntries(envs) {
    */
   function enablePublishedDirect(url) {
     publishedAnchor.classList.remove("has-dropdown");
-    btnPublished.removeAttribute("trailing-icon");
     btnPublished.setAttribute("aria-haspopup", "false");
     btnPublished.setAttribute("aria-expanded", "false");
 
@@ -685,8 +677,8 @@ function sortedEnvEntries(envs) {
     while (publishedMenu.firstChild) publishedMenu.removeChild(publishedMenu.firstChild);
 
     if (options.length === 0) {
-      const empty = document.createElement("md-menu-item");
-      empty.innerHTML = `<div slot="headline">No live copies configured</div>`;
+      const empty = document.createElement("sp-menu-item");
+      empty.textContent = "No live copies configured";
       empty.disabled = true;
       empty.classList.add("published-menu__empty");
       publishedMenu.appendChild(empty);
@@ -694,12 +686,13 @@ function sortedEnvEntries(envs) {
     }
 
     for (const { label, url } of options) {
-      const item = document.createElement("md-menu-item");
+      const item = document.createElement("sp-menu-item");
       item.setAttribute("role", "menuitem");
-      item.innerHTML = `
-        <md-icon slot="start" aria-hidden="true">language</md-icon>
-        <div slot="headline">${label}</div>
-      `;
+      const icon = document.createElement("sp-icon-globe");
+      icon.setAttribute("slot", "icon");
+      icon.setAttribute("aria-hidden", "true");
+      item.appendChild(icon);
+      item.append(label);
 
       item.addEventListener("click", () => {
         closePublishedMenu();
