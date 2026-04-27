@@ -1,7 +1,7 @@
-// build.js — builds the MD3 JS bundle, CSS stylesheet, and dist packages.
+// build.js — builds the Spectrum Web Components JS bundle, CSS stylesheet, and dist packages.
 //
 // JS pipeline  (esbuild):
-//   src/md-imports.js  →  md-bundle.js
+//   src/swc-imports.js  →  swc-bundle.js
 //
 // CSS pipeline (PostCSS):
 //   src/css/main.css   →  style.css
@@ -54,7 +54,7 @@ async function buildCSS() {
 const esbuildCtx = await esbuild.context({
   // Object form lets us control output filenames independently of source paths.
   entryPoints: {
-    "md-bundle":  "src/md-imports.js",  // → md-bundle.js
+    "swc-bundle": "src/swc-imports.js", // → swc-bundle.js
     "sidepanel":  "src/sidepanel.js",   // → sidepanel.js
   },
   bundle:    true,
@@ -75,10 +75,8 @@ const CHROME_FILES = [
   "popup.js",
   "sidepanel.html",
   "sidepanel.js",   // built from src/sidepanel.js by esbuild
-  "options.html",
-  "options.js",
   "style.css",
-  "md-bundle.js",
+  "swc-bundle.js",  // built from src/swc-imports.js by esbuild
   "icon.png",       // skipped silently if absent
 ];
 
@@ -113,7 +111,7 @@ if (pkgOnly) {
 } else if (watch) {
   // Initial build (no packaging in watch mode)
   await Promise.all([buildCSS(), esbuildCtx.watch()]);
-  console.log("[js]   watching src/md-imports.js…");
+  console.log("[js]   watching src/swc-imports.js…");
 
   const watcher = fs.watch(
     path.join(__dir, "src/css"),

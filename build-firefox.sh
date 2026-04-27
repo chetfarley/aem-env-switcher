@@ -20,9 +20,8 @@ mkdir -p "$DIST"
 echo "Copying shared files..."
 cp "$ROOT/style.css"      "$DIST/"
 cp "$ROOT/popup.js"       "$DIST/"
-cp "$ROOT/options.js"     "$DIST/"
 # Bundled JS (built by: npm run build)
-cp "$ROOT/md-bundle.js"   "$DIST/"
+cp "$ROOT/swc-bundle.js"  "$DIST/"
 cp "$ROOT/sidepanel.js"   "$DIST/"
 # Copy icon if it exists
 [ -f "$ROOT/icon.png" ] && cp "$ROOT/icon.png" "$DIST/"
@@ -40,9 +39,6 @@ sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|
 
 sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
   "$ROOT/sidepanel.html" > "$DIST/sidepanel.html"
-
-sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
-  "$ROOT/options.html" > "$DIST/options.html"
 
 echo "Creating zip archive..."
 ZIP="$ROOT/dist/aem-env-switcher-firefox.zip"
