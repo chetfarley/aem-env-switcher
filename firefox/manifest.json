@@ -18,5 +18,6 @@
     "default_panel": "sidepanel.html",
     "default_title": "AEM Env Switcher Settings"
   },
-  "permissions": ["tabs", "storage"]
+  "permissions": ["tabs", "storage"],
+  "content_security_policy": "script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self'"
 }
