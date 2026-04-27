@@ -1,6 +1,7 @@
 /* ==========================================================================
    _popup.css
    Layout for the extension popup window: toolbar + context bar.
+   All colors via Spectrum tokens provided by <sp-theme>.
    ========================================================================== */
 
 /* ── Popup body ───────────────────────────────────────────────────────────── */
@@ -18,7 +19,7 @@ body.popup {
   align-items: center;
   gap: 20px;
   padding: 32px 12px;
-  background: var(--md-sys-color-surface-container-low);
+  background: var(--spectrum-gray-200, #eaeaea);
   height: 72px;
 }
 
@@ -29,9 +30,8 @@ body.popup {
   align-items: center;
 }
 
-.toolbar__env md-filled-select {
+.toolbar__env sp-picker {
   width: 148px;
-  --md-filled-select-text-field-container-height: 48px;
 }
 
 /* Instance buttons — grow to fill remaining space, equal-width */
@@ -43,7 +43,7 @@ body.popup {
   gap: 8px;
 }
 
-/* Published button needs a relative wrapper for md-menu anchor positioning */
+/* Published button needs a relative wrapper for sp-popover positioning */
 .published-anchor {
   position: relative;
   display: inline-flex;
@@ -51,14 +51,13 @@ body.popup {
 
 /*
   Dropdown mode (.has-dropdown added by JS when page is a language-master).
-  The arrow icon is hidden by default; CSS reveals it only in this mode
-  so we never fight the shadow-DOM to hide it.
+  Hide the chevron icon by default; CSS reveals it only in dropdown mode.
 */
-.published-anchor:not(.has-dropdown) md-icon[slot="icon"] {
+.published-anchor:not(.has-dropdown) sp-icon-chevron-down {
   display: none;
 }
 
-/* Widen the button slightly to accommodate the trailing icon comfortably */
+/* Widen the button slightly to accommodate the trailing icon */
 .published-anchor.has-dropdown .instance-btn {
   min-width: 138px;
 }
@@ -72,7 +71,7 @@ body.popup {
 .toolbar__divider {
   width: 1px;
   height: 100cqw;
-  background: var(--md-sys-color-outline-variant);
+  background: var(--spectrum-gray-400, #b0b0b0);
   flex-shrink: 0;
   border-radius: 1px;
 }
@@ -92,17 +91,17 @@ body.popup {
   align-items: baseline;
   gap: 8px;
   padding: 4px 14px 6px;
-  background: var(--md-sys-color-surface);
+  background: var(--spectrum-gray-100, #f5f5f5);
   font-size: 11px;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--spectrum-gray-700, #464646);
   min-height: 22px;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+  border-top: 1px solid var(--spectrum-gray-300, #d0d0d0);
 }
 
 .context-bar__type {
   font-weight: 600;
   white-space: nowrap;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--spectrum-gray-700, #464646);
   flex-shrink: 0;
 }
 

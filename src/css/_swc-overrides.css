@@ -1,0 +1,41 @@
+/* ==========================================================================
+   _swc-overrides.css
+   Spectrum Web Components token overrides.
+
+   sp-theme handles all color tokens. This file only overrides what our
+   specific UI requires beyond Spectrum defaults — sizing, layout nudges,
+   and structural overrides. Never !important or shadow-DOM selectors.
+
+   Reference: https://opensource.adobe.com/spectrum-web-components/
+   ========================================================================== */
+
+/* ── Published popover ────────────────────────────────────────────────────── */
+
+#published-menu {
+  min-width: 180px;
+}
+
+#published-menu sp-menu-item {
+  min-width: 180px;
+}
+
+/* Empty-state item — muted, non-interactive */
+#published-menu .published-menu__empty {
+  font-style: italic;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── Action buttons in toolbar ────────────────────────────────────────────── */
+
+/* Cursor fix for disabled sp-button (Spectrum leaves pointer by default) */
+sp-button[disabled] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── sp-picker width in toolbar ──────────────────────────────────────────── */
+
+.toolbar__env sp-picker {
+  --spectrum-picker-width: 148px;
+}

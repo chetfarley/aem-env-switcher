@@ -1,7 +1,7 @@
 /* ==========================================================================
    _reset.css
-   Minimal global reset. Keeps only what's needed — no opinionated resets
-   that fight MD3 web components (they have their own shadow-DOM resets).
+   Minimal global reset. sp-theme provides all color tokens via its
+   shadow DOM — we only set structural defaults here.
    ========================================================================== */
 
 *, *::before, *::after {
@@ -9,9 +9,10 @@
 }
 
 body {
-  font-family: 'Google Sans', system-ui, -apple-system, Roboto, sans-serif;
-  background: var(--md-sys-color-surface);
-  color: var(--md-sys-color-on-surface);
+  font-family: adobe-clean, 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
+               'Segoe UI', Roboto, sans-serif;
+  background: var(--spectrum-gray-100, #f5f5f5);
+  color: var(--spectrum-gray-800, #1d1d1d);
   margin: 0;
   padding: 0;
 }

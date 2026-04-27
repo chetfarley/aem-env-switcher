@@ -1,134 +1,16 @@
 /* ==========================================================================
    _tokens.css
-   MD3 System Color Tokens — dark theme, seed #00FFFC (cyan/teal)
-   These map to --md-sys-color-* consumed automatically by @material/web.
-   Computed via HCT tonal palette: hue ≈ 180°, chroma ≈ 100.
-
-   Also contains legacy CSS custom properties aliased to MD3 tokens so the
-   options page keeps working without changes until Prompts 5 & 6.
+   Spectrum Web Components is themed via <sp-theme> in HTML.
+   This file contains ONLY non-color layout tokens used across our own CSS.
+   No --md-sys-color-*, --md-ref-typeface-*, or --md-filled-* tokens.
    ========================================================================== */
 
 :root {
-  color-scheme: dark;
-
-  /* ── Primary — tone 80 (dark scheme) ──────────────────────────────────── */
-  --md-sys-color-primary:                  #00e2e0;
-  --md-sys-color-on-primary:               #003737;
-  --md-sys-color-primary-container:        #004f4f;
-  --md-sys-color-on-primary-container:     #80f2f0;
-
-  /* ── Secondary — desaturated cyan, tone 80 ────────────────────────────── */
-  --md-sys-color-secondary:                #a8c8c8;
-  --md-sys-color-on-secondary:             #203434;
-  --md-sys-color-secondary-container:      #364f4f;
-  --md-sys-color-on-secondary-container:   #c4e4e4;
-
-  /* ── Tertiary — blue-adjacent, tone 80 ───────────────────────────────── */
-  --md-sys-color-tertiary:                 #a4b8d8;
-  --md-sys-color-on-tertiary:              #1c2c42;
-  --md-sys-color-tertiary-container:       #334358;
-  --md-sys-color-on-tertiary-container:    #c0d4f0;
-
-  /* ── Error ────────────────────────────────────────────────────────────── */
-  --md-sys-color-error:                    #ffb4ab;
-  --md-sys-color-on-error:                 #690005;
-  --md-sys-color-error-container:          #93000a;
-  --md-sys-color-on-error-container:       #ffdad6;
-
-  /* ── Background / Surface ─────────────────────────────────────────────── */
-  --md-sys-color-background:               #0d1a1a;
-  --md-sys-color-on-background:            #d6e4e4;
-  --md-sys-color-surface:                  #0d1a1a;
-  --md-sys-color-on-surface:               #d6e4e4;
-  --md-sys-color-surface-variant:          #3a4848;
-  --md-sys-color-on-surface-variant:       #b8c8c8;
-
-  /* ── Surface containers (darkest → lightest) ──────────────────────────── */
-  --md-sys-color-surface-container-lowest: #0a1515;
-  --md-sys-color-surface-container-low:    #151f1f;
-  --md-sys-color-surface-container:        #1a2424;
-  --md-sys-color-surface-container-high:   #1e2929;
-  --md-sys-color-surface-container-highest:#242f2f;
-
-  /* ── Outline ──────────────────────────────────────────────────────────── */
-  --md-sys-color-outline:                  #7a8a8a;
-  --md-sys-color-outline-variant:          #3a4848;
-
-  /* ── Inverse ──────────────────────────────────────────────────────────── */
-  --md-sys-color-inverse-surface:          #d6e4e4;
-  --md-sys-color-inverse-on-surface:       #2a3838;
-  --md-sys-color-inverse-primary:          #006a6a;
-
-  /* ── Misc ─────────────────────────────────────────────────────────────── */
-  --md-sys-color-shadow:                   #000000;
-  --md-sys-color-scrim:                    #000000;
-  --md-sys-color-surface-tint:             #00e2e0;
-
-  /* ── MD3 typography (used by components) ─────────────────────────────── */
-  /* Root typeface token — prevents bare "Roboto" falling back to serif */
-  --md-ref-typeface-plain:                 'Google Sans', system-ui, -apple-system, sans-serif;
-  --md-ref-typeface-brand:                 'Google Sans', system-ui, -apple-system, sans-serif;
-  --md-sys-typescale-label-large-font:     system-ui, -apple-system, sans-serif;
-  --md-sys-typescale-body-medium-font:     system-ui, -apple-system, sans-serif;
-
-  /* ── Spacing (used by options page and components) ───────────────────── */
-  --spacing-third: 0.333rlh;
-  --spacing-half:  0.5rlh;
-  --spacing-1:     1rlh;
-  --spacing-2:     2rlh;
-
-  /* ── Legacy palette aliases (options page) ───────────────────────────── */
-  /* Raw grays — kept for reference, options page selectors use these */
-  --dark-gray-1: #121212;
-  --dark-gray-2: #1a2424;
-  --dark-gray-3: #242f2f;
-  --dark-gray-4: #3a4848;
-  --dark-gray-5: #4a5858;
-  --light-gray-e: #e0eded;
-  --light-gray-b: #b8c8c8;
-  --light-gray-a: #a0b0b0;
-  --white: #ffffff;
-
-  /* Semantic aliases — point legacy vars to MD3 tokens */
-  --body-background-color:               var(--md-sys-color-surface);
-  --text-color--base:                    var(--md-sys-color-on-surface-variant);
-  --text-color--emphasis:                var(--md-sys-color-on-surface);
-  --link-color--base:                    var(--md-sys-color-primary);
-  --link-background-color--hover:        var(--md-sys-color-surface-container);
-
-  /* Buttons — primary */
-  --btn-primary-color:                   var(--md-sys-color-on-primary-container);
-  --btn-primary-background-color:        var(--md-sys-color-primary-container);
-  --btn-primary-border-color:            var(--md-sys-color-primary-container);
-  --btn-primary-background-color--hover: var(--md-sys-color-surface-variant);
-
-  /* Buttons — neutral */
-  --btn-text-color:                      var(--md-sys-color-on-surface);
-  --btn-background-color:                var(--md-sys-color-surface-container-high);
-  --btn-border-color:                    var(--md-sys-color-outline-variant);
-  --btn-background-color--hover:         var(--md-sys-color-surface-container-highest);
-  --btn-border-color--hover:             var(--md-sys-color-outline);
-
-  /* Buttons — active */
-  --btn-color--active:                   var(--md-sys-color-on-primary);
-  --btn-background-color--active:        var(--md-sys-color-primary);
-  --btn-border-color--active:            var(--md-sys-color-primary-container);
-
-  /* Buttons — danger */
-  --btn-danger-text-color:               #ffffff;
-  --btn-danger-background-color:         #93000a;
-  --btn-danger-border-color:             #690005;
-  --btn-danger-background-color--hover:  #b3000c;
-
-  /* Misc */
-  --btn-border-radius:    4px;
-  --block-border:         var(--md-sys-color-outline-variant);
-  --block-background-color: var(--md-sys-color-surface-container);
-  --label-text-color:     var(--md-sys-color-on-surface-variant);
-  --input-text-color:     var(--md-sys-color-on-surface);
-  --input-border-color:   var(--md-sys-color-outline-variant);
-  --input-background-color: rgba(0, 0, 0, 0.15);
-
-  /* Material Symbols — tell md-icon which font to use */
-  --md-icon-font: 'Material Symbols Outlined';
+  /* ── Spacing scale ───────────────────────────────────────────────────── */
+  --spacing-xs:  4px;
+  --spacing-sm:  8px;
+  --spacing-md:  12px;
+  --spacing-lg:  16px;
+  --spacing-xl:  20px;
+  --spacing-2xl: 32px;
 }

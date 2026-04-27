@@ -1,6 +1,7 @@
 /* ==========================================================================
    _sidepanel.css
    Styles for the settings side panel (sidepanel.html).
+   All colors via Spectrum tokens provided by <sp-theme>.
    ========================================================================== */
 
 /* ── Body ────────────────────────────────────────────────────────────────── */
@@ -8,7 +9,6 @@
 body.sidepanel {
   width: 100%;
   min-width: 280px;
-  background: var(--md-sys-color-surface);
   overflow-y: auto;
   padding-bottom: 32px;
 }
@@ -28,40 +28,33 @@ body.sidepanel {
   align-items: center;
   gap: 10px;
   padding: 16px 20px 12px;
-  background: var(--md-sys-color-surface-container-low);
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--spectrum-gray-200, #eaeaea);
+  border-bottom: 1px solid var(--spectrum-gray-300, #d0d0d0);
 }
 
 .sp-header__icon {
-  color: var(--md-sys-color-primary);
+  color: var(--spectrum-accent-color-800, #0d66d0);
   font-size: 22px;
 }
 
 .sp-header__title {
   font-size: 18px;
   font-weight: 500;
-  color: var(--md-sys-color-on-surface);
   margin: 0;
 }
 
 /* ── Tabs ────────────────────────────────────────────────────────────────── */
 
-md-tabs {
+sp-tabs {
   width: 100%;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
-/* ── Panels ──────────────────────────────────────────────────────────────── */
-
-.sp-panel {
-  padding: 20px 20px 0;
+/* sp-tab-panel: add padding inside each panel */
+sp-tab-panel {
   display: flex;
   flex-direction: column;
   gap: 16px;
-}
-
-.sp-panel--hidden {
-  display: none;
+  padding: 20px 20px 0;
 }
 
 /* ── Hint text ───────────────────────────────────────────────────────────── */
@@ -69,16 +62,16 @@ md-tabs {
 .sp-hint {
   margin: 0;
   font-size: 12px;
-  color: var(--md-sys-color-on-surface-variant);
+  color: var(--spectrum-gray-700, #464646);
   line-height: 1.6;
 }
 
 .sp-hint code {
-  background: var(--md-sys-color-surface-container-highest);
+  background: var(--spectrum-gray-200, #eaeaea);
   border-radius: 4px;
   padding: 1px 5px;
   font-size: 11px;
-  color: var(--md-sys-color-primary);
+  color: var(--spectrum-accent-color-800, #0d66d0);
 }
 
 /* ── List containers ─────────────────────────────────────────────────────── */
@@ -96,35 +89,26 @@ md-tabs {
   justify-content: flex-start;
 }
 
-/* ── Status message ──────────────────────────────────────────────────────── */
+/* ── Status toast container ──────────────────────────────────────────────── */
 
 .sp-status {
   min-height: 18px;
-  font-size: 12px;
-  font-weight: 500;
 }
 
-.sp-status[data-type="error"]   { color: var(--md-sys-color-error); }
-.sp-status[data-type="success"] { color: var(--md-sys-color-primary); }
-
-/* ── Import / Export toolbar ────────────────────────────────────────────── */
+/* ── Import / Export toolbar ─────────────────────────────────────────────── */
 
 .sp-io-bar {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  border-bottom: 1px solid var(--spectrum-gray-300, #d0d0d0);
 }
 
 .sp-io-status {
   margin-left: auto;
-  font-size: 12px;
-  font-weight: 500;
+  min-height: 18px;
 }
-
-.sp-io-status[data-type="error"]   { color: var(--md-sys-color-error); }
-.sp-io-status[data-type="success"] { color: var(--md-sys-color-primary); }
 
 /* ── Actions bar ─────────────────────────────────────────────────────────── */
 
@@ -139,9 +123,9 @@ md-tabs {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .env-card {
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 12px;
-  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--spectrum-gray-300, #d0d0d0);
+  border-radius: 8px;
+  background: var(--spectrum-gray-100, #f5f5f5);
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -150,8 +134,8 @@ md-tabs {
 }
 
 .env-card--builtin {
-  background: var(--md-sys-color-surface-container-low);
-  border-color: var(--md-sys-color-primary-container);
+  background: var(--spectrum-gray-75, #fafafa);
+  border-color: var(--spectrum-accent-color-400, #4b9cf5);
 }
 
 .env-card__header {
@@ -164,7 +148,6 @@ md-tabs {
   flex: 1;
   font-weight: 600;
   font-size: 14px;
-  color: var(--md-sys-color-on-surface);
 }
 
 .env-card__name-input {
@@ -172,8 +155,8 @@ md-tabs {
 }
 
 .env-card__remove {
-  color: var(--md-sys-color-error);
   flex-shrink: 0;
+  color: var(--spectrum-negative-color-800, #d7373f);
 }
 
 .env-card__fields {
@@ -190,13 +173,13 @@ md-tabs {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Language Master cards  (reused from _i18n-dialog.css — same class names)
+   Language Master cards
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .lm-card {
-  border: 1px solid var(--md-sys-color-primary-container);
-  border-radius: 12px;
-  background: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--spectrum-accent-color-400, #4b9cf5);
+  border-radius: 8px;
+  background: var(--spectrum-gray-75, #fafafa);
   overflow: hidden;
 }
 
@@ -205,7 +188,7 @@ md-tabs {
   align-items: center;
   gap: 8px;
   padding: 12px 14px 10px;
-  background: var(--md-sys-color-surface-container);
+  background: var(--spectrum-gray-100, #f5f5f5);
 }
 
 .lm-card__path {
@@ -213,13 +196,12 @@ md-tabs {
 }
 
 .lm-card__collapse {
-  color: var(--md-sys-color-on-surface-variant);
   flex-shrink: 0;
 }
 
 .lm-card__remove {
-  color: var(--md-sys-color-error);
   flex-shrink: 0;
+  color: var(--spectrum-negative-color-800, #d7373f);
 }
 
 .lm-card__body {
@@ -227,7 +209,7 @@ md-tabs {
   flex-direction: column;
   gap: 8px;
   padding: 10px 14px 12px;
-  border-top: 1px solid var(--md-sys-color-outline-variant);
+  border-top: 1px solid var(--spectrum-gray-300, #d0d0d0);
   max-height: 2000px;
   transition: max-height 0.25s ease, padding 0.2s ease, opacity 0.2s ease;
   opacity: 1;
@@ -244,11 +226,10 @@ md-tabs {
 
 .lm-card__add-lc {
   align-self: flex-start;
-  --md-text-button-label-text-color: var(--md-sys-color-secondary);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   Live Copy rows  (reused class names from _i18n-dialog.css)
+   Live Copy rows
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .lc-list {
@@ -262,8 +243,8 @@ md-tabs {
   align-items: flex-start;
   gap: 8px;
   padding: 10px 10px 6px;
-  background: var(--md-sys-color-surface-container-highest);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--spectrum-gray-200, #eaeaea);
+  border: 1px solid var(--spectrum-gray-300, #d0d0d0);
   border-radius: 8px;
   flex-wrap: wrap;
 }
@@ -273,7 +254,7 @@ md-tabs {
 .lc-row__masked { flex: 0 0 140px; }
 
 .lc-row__remove {
-  color: var(--md-sys-color-error);
+  color: var(--spectrum-negative-color-800, #d7373f);
   flex-shrink: 0;
   margin-top: 4px;
   opacity: 0.7;
