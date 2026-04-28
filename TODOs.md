@@ -1,17 +1,16 @@
 TODOs
 
-x affected by Spectrum
 
-Functional
-- Overflow: Solve height of widget so drop downs are visible  [lg]
-  x - Layout. Could switch to Tall Cards / Boxes for each instance. Show env dropdown above cards. This could fix overflow issue [lg]
-  - Switch dropdowns to use native <select> boxes. This would work.
+sidebar:
+- move Export/Import into list (sp-action-menu). Add Close icon next to this. Remove "AEM Environment Switcher" heading bar. 
+- move instructional text into tooltip+overlay (contextual-help?) or help-text 
 
-Visual
-- in context menu, put instance text in a badge (or sp-status-light)
+popup:
+- Change Environment Switcher Background based on which env. Add color swatches to settings.
+- in Context menu, put instance text in a badge (or sp-status-light)
+- add Links to tools: (CRX, Package Mgr, OSGi Configs) (use sp-action-menu) [md]
+- Update extension Icon based on environment (e.g. grey local, yellow dev, orange qa, blue stage, green prod) OR add color swatch to settings, for each env. [md]
 
 New Features:
-- Update extendion Icon based on environment (e.g. grey local, yellow dev, orange qa, blue stage, green prod ) [md]
 - Links to other page functions: (Page Properties) [md]
-- Links to tools: (CRX, Package Mgr, OSGi Configs) (use sp-action-menu) [md]
 - Click image to go to DAM: [lg]
