@@ -9,99 +9,74 @@
 <body class="popup">
 <sp-theme id="sp-theme" scale="medium" color="light">
 
-  <!-- ── Toolbar ─────────────────────────────────────────────────────────── -->
-  <div class="toolbar" id="toolbar" role="toolbar" aria-label="AEM Environment Switcher">
+  <!-- ── Title bar ─────────────────────────────────────────────────────── -->
+  <div class="titlebar" role="toolbar" aria-label="AEM Environment Switcher">
 
-    <!-- Environment selector -->
-    <div class="toolbar__env">
-      <sp-picker id="envSelect" label="Environment" size="m">
+    <div class="titlebar__env">
+      <sp-picker id="envSelect" label="Environment" size="s">
         <!-- Populated dynamically by popup.js -->
       </sp-picker>
     </div>
 
-    <!-- Instance action buttons -->
-    <div class="toolbar__actions" role="group" aria-label="View instance">
-      <sp-button id="btn-editor" class="instance-btn" variant="secondary" size="m">
-        Editor
-      </sp-button>
+    <div class="titlebar__divider" aria-hidden="true"></div>
 
-      <sp-button id="btn-preview" class="instance-btn" variant="secondary" size="m">
-        Preview
-      </sp-button>
-
-      <!-- Published: direct link OR dropdown for language-master pages -->
-      <div class="published-anchor">
-        <sp-button
-          id="btn-published"
-          class="instance-btn"
-          variant="secondary"
-          size="m"
-          aria-haspopup="menu"
-          aria-expanded="false"
-        >
-          Published
-          <!--
-            JS adds/removes .has-dropdown on .published-anchor.
-            CSS shows/hides the chevron icon via that class.
-          -->
-          <sp-icon-chevron-down slot="icon" aria-hidden="true"></sp-icon-chevron-down>
-        </sp-button>
-        <!--
-          sp-overlay + sp-popover replace md-menu.
-          trigger / anchorElement set via JS; open controlled via .open property.
-        -->
-        <sp-overlay
-          id="published-overlay"
-          trigger="btn-published@click"
-          placement="bottom-start"
-          type="auto"
-        >
-          <sp-popover
-            id="published-menu"
-            role="menu"
-            aria-label="Published live copies"
-            tip
-          >
-            <sp-menu>
-              <!-- Populated dynamically for language-master pages -->
-            </sp-menu>
-          </sp-popover>
-        </sp-overlay>
-      </div>
-    </div>
-
-    <!-- Vertical divider -->
-    <sp-divider 
-      size="m"
-      style="align-self: stretch; height: auto;"
-      vertical
-      class="toolbar__divider" 
-      aria-hidden="true"
-      ></sp-divider>
-
-    <!-- Settings + close -->
-    <div class="toolbar__meta">
-      <sp-action-button id="btn-menu" quiet title="Settings">
+    <div class="titlebar__meta">
+      <sp-action-button id="btn-menu" quiet size="s" title="Settings">
         <sp-icon-settings slot="icon"></sp-icon-settings>
       </sp-action-button>
-
-      <sp-action-button id="btn-close" quiet title="Close">
+      <sp-action-button id="btn-close" quiet size="s" title="Close">
         <sp-icon-close slot="icon"></sp-icon-close>
       </sp-action-button>
     </div>
 
   </div>
-  <!-- /toolbar -->
+
+  <!-- ── Instance cards ────────────────────────────────────────────────── -->
+  <div class="instance-grid" role="group" aria-label="View instance">
+
+    <button id="btn-editor" class="instance-card" type="button">
+      <sp-icon-edit class="instance-card__icon" aria-hidden="true"></sp-icon-edit>
+      <span class="instance-card__label">Editor</span>
+    </button>
+
+    <button id="btn-preview" class="instance-card" type="button">
+      <sp-icon-preview class="instance-card__icon" aria-hidden="true"></sp-icon-preview>
+      <span class="instance-card__label">Preview</span>
+    </button>
+
+    <!-- Published: direct link OR dropdown for language-master pages -->
+    <div class="published-anchor">
+      <button id="btn-published" class="instance-card" type="button"
+        aria-haspopup="menu" aria-expanded="false">
+        <sp-icon-publish-check class="instance-card__icon" aria-hidden="true"></sp-icon-publish-check>
+        <span class="instance-card__label">Published <sp-icon-chevron-down class="instance-card__chevron" aria-hidden="true"></sp-icon-chevron-down></span>
+      </button>
+      <sp-overlay
+        id="published-overlay"
+        trigger="btn-published@click"
+        placement="left"
+        type="auto"
+      >
+        <sp-popover
+          id="published-menu"
+          role="menu"
+          aria-label="Published live copies"
+        >
+          <sp-menu>
+            <!-- Populated dynamically for language-master pages -->
+          </sp-menu>
+        </sp-popover>
+      </sp-overlay>
+    </div>
+
+  </div>
 
   <!-- ── Context bar ─────────────────────────────────────────────────────── -->
   <div class="context-bar" id="contextBar" aria-live="polite">
-    <sp-status-light variant="yellow" class="context-bar__type" id="contextLabel"></sp-status-light>
-    <span class="context-bar__url"  id="currentUrl"></span>
+    <span class="context-bar__type" id="contextLabel"></span>
+    <span class="context-bar__url" id="currentUrl"></span>
   </div>
 
-  <!--
-    popup.js runs after swc-bundle.js has registered all custom elements.
-  -->
   <script src="popup.js" defer></script>
 
 </sp-theme>

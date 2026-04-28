@@ -1,94 +1,149 @@
 /* ==========================================================================
    _popup.css
-   Layout for the extension popup window: toolbar + context bar.
+   Layout for the extension popup: titlebar + instance cards + context bar.
    All colors via Spectrum tokens provided by <sp-theme>.
    ========================================================================== */
 
 /* ── Popup body ───────────────────────────────────────────────────────────── */
 
 body.popup {
-  width: 720px;
-  min-height: 72px;
-  overflow: hidden; /* prevent scrollbar flash on initial render */
+  width: 480px;
+  overflow: visible; /* allow sp-overlay to render outside body bounds */
 }
 
-/* ── Toolbar ──────────────────────────────────────────────────────────────── */
+/* ── Title bar ────────────────────────────────────────────────────────────── */
 
-.toolbar {
+.titlebar {
   display: flex;
   align-items: center;
-  gap: 20px;
-  padding: 32px 12px;
-  background: var(--spectrum-gray-200);
-  height: 72px;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  background: var(--spectrum-gray-300);
+  height: 40px;
+  border-bottom: 1px solid var(--spectrum-gray-400);
 }
 
-/* Environment selector — fixed width, vertically centred */
-.toolbar__env {
-  flex: 0 0 148px;
-  display: flex;
-  align-items: center;
-}
-
-.toolbar__env sp-picker {
-  width: 148px;
-}
-
-/* Instance buttons — grow to fill remaining space, equal-width */
-.toolbar__actions {
+.titlebar__env {
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  min-width: 0;
 }
 
-/* Published button needs a relative wrapper for sp-popover positioning */
-.published-anchor {
-  position: relative;
-  display: inline-flex;
+.titlebar__env sp-picker {
+  width: 100%;
 }
 
-/*
-  Dropdown mode (.has-dropdown added by JS when page is a language-master).
-  Hide the chevron icon by default; CSS reveals it only in dropdown mode.
-*/
-.published-anchor:not(.has-dropdown) sp-icon-chevron-down {
-  display: none;
-}
-
-/* Widen the button slightly to accommodate the trailing icon */
-.published-anchor.has-dropdown .instance-btn {
-  min-width: 138px;
-}
-
-/* Base size shared by all three instance buttons */
-.instance-btn {
-  min-width: 112px;
-}
-
-/* Vertical divider separating actions from meta controls */
-.toolbar__divider {
+.titlebar__divider {
   width: 1px;
-  height: 100cqw; /* TODO: fix height of divider */
+  align-self: stretch;
   background: var(--spectrum-gray-400);
   flex-shrink: 0;
-  border-radius: 1px;
+  margin-block: 6px;
 }
 
-/* Hamburger + close */
-.toolbar__meta {
+.titlebar__meta {
   display: flex;
   align-items: center;
   gap: 2px;
   flex-shrink: 0;
 }
 
+/* ── Instance card grid ───────────────────────────────────────────────────── */
+
+.instance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* .published-anchor is a grid item — make it transparent to layout */
+.published-anchor {
+  display: contents;
+}
+
+.instance-card {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 24px 12px 20px;
+  background: var(--spectrum-gray-75);
+  border-right: 1px solid var(--spectrum-gray-300);
+  border-bottom: 3px solid transparent; /* reserve space for active indicator */
+  transition: background 0.12s, border-bottom-color 0.12s;
+  position: relative;
+  text-align: center;
+}
+
+.published-anchor:last-child .instance-card {
+  border-right: none;
+}
+
+.instance-card:hover:not(:disabled) {
+  background: var(--spectrum-gray-100);
+}
+
+.instance-card:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Active: currently viewing this instance in the selected env */
+.instance-card.is-active {
+  background: var(--spectrum-blue-100);
+  border-bottom-color: var(--spectrum-accent-color-700);
+  opacity: 1; /* override disabled state if both active and unavailable */
+}
+
+.instance-card__icon {
+  width: 28px;
+  height: 28px;
+  color: var(--spectrum-gray-600);
+}
+
+.instance-card.is-active .instance-card__icon {
+  color: var(--spectrum-accent-color-800);
+}
+
+.instance-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--spectrum-gray-700);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+
+.instance-card.is-active .instance-card__label {
+  color: var(--spectrum-accent-color-900);
+}
+
+/* Chevron — shown only when .published-anchor has .has-dropdown */
+.instance-card__chevron {
+  display: none;
+  /* position: absolute; */
+  /* bottom: 5px; */
+  margin-inline-start: 2px;
+  width: 12px;
+  height: 12px;
+  color: var(--spectrum-gray-500);
+}
+
+.published-anchor.has-dropdown .instance-card__chevron {
+  display: block;
+}
+
 /* ── Context bar ──────────────────────────────────────────────────────────── */
 
 .context-bar {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 8px;
   padding: 4px 14px 6px;
   background: var(--spectrum-gray-100);
@@ -96,6 +151,7 @@ body.popup {
   color: var(--spectrum-gray-700);
   min-height: 22px;
   border-top: 1px solid var(--spectrum-gray-300);
+  overflow: hidden;
 }
 
 .context-bar__type {
@@ -113,6 +169,7 @@ body.popup {
 }
 
 .context-bar__url {
+  flex: 1 1 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

@@ -611,8 +611,7 @@ function sortedEnvEntries(envs) {
   function setBtn(btn, action, isActive) {
     const available = action !== null && action !== undefined;
     btn.disabled = !available;
-    // Spectrum uses variant attribute for visual state — no CSS class toggling needed.
-    btn.setAttribute("variant", isActive ? "accent" : "secondary");
+    btn.classList.toggle("is-active", isActive);
   }
 
   // ── Published dropdown helpers ──────────────────────────────────────────────

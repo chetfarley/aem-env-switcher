@@ -30,7 +30,7 @@
   pointer-events: none;
 }
 
-/* ── Action buttons in toolbar ────────────────────────────────────────────── */
+/* ── Action buttons ────────────────────────────────────────────── */
 
 /* Cursor fix for disabled sp-button (Spectrum leaves pointer by default) */
 sp-button[disabled] {
@@ -38,8 +38,8 @@ sp-button[disabled] {
   pointer-events: none;
 }
 
-/* ── sp-picker width in toolbar ──────────────────────────────────────────── */
+/* ── sp-picker in titlebar ────────────────────────────────────────────────── */
 
-.toolbar__env sp-picker {
+.ttitlebar__env sp-picker {
   --spectrum-picker-width: 148px;
 }
