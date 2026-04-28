@@ -50,22 +50,34 @@
           sp-overlay + sp-popover replace md-menu.
           trigger / anchorElement set via JS; open controlled via .open property.
         -->
-        <sp-popover
-          id="published-menu"
-          role="menu"
-          aria-label="Published live copies"
+        <sp-overlay
+          id="published-overlay"
+          trigger="btn-published@click"
           placement="bottom-start"
-          tip
+          type="auto"
         >
-          <sp-menu>
-            <!-- Populated dynamically for language-master pages -->
-          </sp-menu>
-        </sp-popover>
+          <sp-popover
+            id="published-menu"
+            role="menu"
+            aria-label="Published live copies"
+            tip
+          >
+            <sp-menu>
+              <!-- Populated dynamically for language-master pages -->
+            </sp-menu>
+          </sp-popover>
+        </sp-overlay>
       </div>
     </div>
 
     <!-- Vertical divider -->
-    <div class="toolbar__divider" aria-hidden="true"></div>
+    <sp-divider 
+      size="m"
+      style="align-self: stretch; height: auto;"
+      vertical
+      class="toolbar__divider" 
+      aria-hidden="true"
+      ></sp-divider>
 
     <!-- Settings + close -->
     <div class="toolbar__meta">
@@ -83,7 +95,7 @@
 
   <!-- ── Context bar ─────────────────────────────────────────────────────── -->
   <div class="context-bar" id="contextBar" aria-live="polite">
-    <span class="context-bar__type" id="contextLabel"></span>
+    <sp-status-light variant="yellow" class="context-bar__type" id="contextLabel"></sp-status-light>
     <span class="context-bar__url"  id="currentUrl"></span>
   </div>
 

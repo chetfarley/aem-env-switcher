@@ -19,7 +19,7 @@ body.popup {
   align-items: center;
   gap: 20px;
   padding: 32px 12px;
-  background: var(--spectrum-gray-200, #eaeaea);
+  background: var(--spectrum-gray-200);
   height: 72px;
 }
 
@@ -70,8 +70,8 @@ body.popup {
 /* Vertical divider separating actions from meta controls */
 .toolbar__divider {
   width: 1px;
-  height: 100cqw;
-  background: var(--spectrum-gray-400, #b0b0b0);
+  height: 100cqw; /* TODO: fix height of divider */
+  background: var(--spectrum-gray-400);
   flex-shrink: 0;
   border-radius: 1px;
 }
@@ -91,17 +91,17 @@ body.popup {
   align-items: baseline;
   gap: 8px;
   padding: 4px 14px 6px;
-  background: var(--spectrum-gray-100, #f5f5f5);
+  background: var(--spectrum-gray-100);
   font-size: 11px;
-  color: var(--spectrum-gray-700, #464646);
+  color: var(--spectrum-gray-700);
   min-height: 22px;
-  border-top: 1px solid var(--spectrum-gray-300, #d0d0d0);
+  border-top: 1px solid var(--spectrum-gray-300);
 }
 
 .context-bar__type {
   font-weight: 600;
   white-space: nowrap;
-  color: var(--spectrum-gray-700, #464646);
+  color: var(--spectrum-gray-700);
   flex-shrink: 0;
 }
 

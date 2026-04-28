@@ -13,10 +13,14 @@
 
 #published-menu {
   min-width: 180px;
+  max-height: none;
 }
 
 #published-menu sp-menu-item {
   min-width: 180px;
+  /* Spectrum token for vertical padding inside menu items */
+  --spectrum-menu-item-top-to-text: var(--spacing-md);
+  --spectrum-menu-item-bottom-to-text: var(--spacing-md);
 }
 
 /* Empty-state item — muted, non-interactive */

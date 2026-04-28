@@ -467,6 +467,8 @@ function sortedEnvEntries(envs) {
   const btnPreview     = document.getElementById("btn-preview");
   const btnPublished   = document.getElementById("btn-published");
   const publishedMenu  = document.getElementById("published-menu");
+  const publishedOverlay = document.getElementById("published-overlay");
+  const publishedMenuList = publishedMenu.querySelector("sp-menu");
   const btnMenuToggle  = document.getElementById("btn-menu");
   const btnClose       = document.getElementById("btn-close");
   const contextLabel   = document.getElementById("contextLabel");
@@ -643,12 +645,8 @@ function sortedEnvEntries(envs) {
 
     populatePublishedMenu(options);
 
-    btnPublished.onclick = (e) => {
-      e.stopPropagation();
-      const opening = !publishedMenu.open;
-      publishedMenu.open = opening;
-      btnPublished.setAttribute("aria-expanded", String(opening));
-    };
+    // sp-overlay[trigger="btn-published@click"] owns open/close — no onclick needed.
+    btnPublished.onclick = null;
   }
 
   /**
@@ -663,6 +661,7 @@ function sortedEnvEntries(envs) {
     btnPublished.setAttribute("aria-expanded", "false");
 
     clearPublishedMenu();
+    publishedOverlay.open = false;
 
     btnPublished.onclick = url ? () => navigate(url) : null;
   }
@@ -674,14 +673,14 @@ function sortedEnvEntries(envs) {
    * @param {Array<{label: string, url: string}>} options
    */
   function populatePublishedMenu(options) {
-    while (publishedMenu.firstChild) publishedMenu.removeChild(publishedMenu.firstChild);
+    while (publishedMenuList.firstChild) publishedMenuList.removeChild(publishedMenuList.firstChild);
 
     if (options.length === 0) {
       const empty = document.createElement("sp-menu-item");
       empty.textContent = "No live copies configured";
       empty.disabled = true;
       empty.classList.add("published-menu__empty");
-      publishedMenu.appendChild(empty);
+      publishedMenuList.appendChild(empty);
       return;
     }
 
@@ -699,18 +698,17 @@ function sortedEnvEntries(envs) {
         navigate(url);
       });
 
-      publishedMenu.appendChild(item);
+      publishedMenuList.appendChild(item);
     }
   }
 
   function clearPublishedMenu() {
-    while (publishedMenu.firstChild) publishedMenu.removeChild(publishedMenu.firstChild);
+    while (publishedMenuList.firstChild) publishedMenuList.removeChild(publishedMenuList.firstChild);
   }
 
   /** Close the published menu and restore button state + focus. */
   function closePublishedMenu() {
-    publishedMenu.open = false;
-    btnPublished.setAttribute("aria-expanded", "false");
+    publishedOverlay.open = false;
     btnPublished.focus();
   }
 

@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "AEM Environment Switcher",
-    "version": "2.0.20",
+    "version": "2.0.0",
     "description": "Quickly switch between AEM environments (Author, Publish, Preview).",
     "action": {
       "default_popup": "popup.html",
