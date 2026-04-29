@@ -38,8 +38,19 @@ sp-button[disabled] {
   pointer-events: none;
 }
 
-/* ── sp-picker in titlebar ────────────────────────────────────────────────── */
+/* ── Picker Menus ────────────────────────────────────────────────────────── */
 
-.ttitlebar__env sp-picker {
-  --spectrum-picker-width: 148px;
+/* Spectrum's constructed stylesheet sets max-height:100% on the sp-popover and
+   sp-menu :host, clamping the dropdown to perceived available space. Since
+   sp-picker promotes its overlay to the browser top layer, we can't use a
+   descendant selector — target the elements directly. !important is needed to
+   beat the constructed stylesheet specificity. */
+sp-popover {
+  height: auto !important;
+  max-height: 135px !important;
+}
+
+sp-menu {
+  height: auto !important;
+  max-height: 135px !important;
 }
