@@ -7,14 +7,13 @@
 
 // ── Constants ────────────────────────────────────────────────────────────────
 
-export const BUILTIN_ENVS = ["localhost", "dev", "qa", "stage", "prod"];
-
+/** Default environments written to storage on first install. */
 const DEFAULT_ENVS = {
-  localhost: { author: "http://localhost:4502",  publish: "http://localhost:4503" },
-  dev:       { author: "", publish: "" },
-  qa:        { author: "", publish: "" },
-  stage:     { author: "", publish: "" },
-  prod:      { author: "", publish: "" },
+  localhost: { author: "http://localhost:4502",  publish: "http://localhost:4503", order: 0 },
+  dev:       { author: "", publish: "", order: 1 },
+  qa:        { author: "", publish: "", order: 2 },
+  stage:     { author: "", publish: "", order: 3 },
+  prod:      { author: "", publish: "", order: 4 },
 };
 
 // ── Bootstrap ────────────────────────────────────────────────────────────────
@@ -44,7 +43,11 @@ async function init() {
   await Promise.all([loadEnvs(), loadI18n()]);
 
   // Add-row buttons
-  document.getElementById("add-env-btn").addEventListener("click", () => appendEnvCard({ key: "", config: { author: "", publish: "" }, isBuiltin: false, isNew: true }));
+  document.getElementById("add-env-btn").addEventListener("click", () => {
+    const cards = document.querySelectorAll("#env-list .env-card");
+    const nextOrder = cards.length; // DOM position-based; gets rewritten on save
+    appendEnvCard({ key: "", config: { author: "", publish: "", order: nextOrder }, isNew: true });
+  });
   document.getElementById("add-lm-btn").addEventListener("click", () => appendLmCard({ masterPath: "", liveCopies: [] }));
 
   // Export / Import
@@ -147,48 +150,50 @@ function _migrateGlobalConfig({ localePath = "", languageMasterPath = "" }) {
 // ═══════════════════════════════════════════════════════════════════════════
 
 async function loadEnvs() {
-  const { envs } = await chrome.storage.sync.get("envs");
-  renderEnvs(envs || DEFAULT_ENVS);
+  let { envs } = await chrome.storage.sync.get("envs");
+  if (!envs) {
+    // First install — seed defaults into storage so they behave like any user env.
+    envs = DEFAULT_ENVS;
+    await chrome.storage.sync.set({ envs });
+  }
+  renderEnvs(envs);
 }
 
 function renderEnvs(envs) {
   const list = document.getElementById("env-list");
   list.innerHTML = "";
-
-  const builtinKeys = BUILTIN_ENVS.filter(k => envs[k] !== undefined);
-  const customKeys  = Object.keys(envs)
-    .filter(k => !BUILTIN_ENVS.includes(k))
-    .sort((a, b) => a.localeCompare(b));
-
-  for (const key of [...builtinKeys, ...customKeys]) {
-    appendEnvCard({ key, config: envs[key], isBuiltin: BUILTIN_ENVS.includes(key), isNew: false });
+  const sorted = Object.entries(envs).sort(([, a], [, b]) => (a.order ?? 999) - (b.order ?? 999));
+  for (const [key, config] of sorted) {
+    appendEnvCard({ key, config, isNew: false });
   }
 }
 
-function appendEnvCard({ key, config, isBuiltin, isNew }) {
+function appendEnvCard({ key, config, isNew }) {
   const list = document.getElementById("env-list");
   const card = document.createElement("div");
-  card.className = `env-card${isBuiltin ? " env-card--builtin" : ""}`;
+  card.className = "env-card";
   card.dataset.envKey = key;
 
   card.innerHTML = `
     <div class="env-card__header">
-      ${isBuiltin
-        ? `<span class="env-card__name">${_cap(key)}</span>`
-        : `<sp-textfield
-             class="env-card__name-input"
-             label="Name"
-             value="${_esc(key)}"
-             maxlength="32"
-             help-text="Letters, numbers, - _ only"
-           ></sp-textfield>`
-      }
-      ${!isBuiltin
-        ? `<sp-action-button class="env-card__remove" quiet type="button" title="Remove">
-             <sp-icon-delete slot="icon"></sp-icon-delete>
-           </sp-action-button>`
-        : ""
-      }
+      <sp-textfield
+        class="env-card__name-input"
+        label="Name"
+        value="${_esc(key)}"
+        maxlength="32"
+        help-text="Letters, numbers, - _ only"
+      ></sp-textfield>
+      <div class="env-card__reorder">
+        <sp-action-button class="env-card__move-up" quiet type="button" title="Move up">
+          <sp-icon-chevron-up slot="icon"></sp-icon-chevron-up>
+        </sp-action-button>
+        <sp-action-button class="env-card__move-down" quiet type="button" title="Move down">
+          <sp-icon-chevron-down slot="icon"></sp-icon-chevron-down>
+        </sp-action-button>
+      </div>
+      <sp-action-button class="env-card__remove" quiet type="button" title="Remove">
+        <sp-icon-delete slot="icon"></sp-icon-delete>
+      </sp-action-button>
     </div>
     <div class="env-card__fields">
       <sp-textfield
@@ -210,7 +215,54 @@ function appendEnvCard({ key, config, isBuiltin, isNew }) {
     </div>
   `;
 
-  card.querySelector(".env-card__remove")?.addEventListener("click", () => card.remove());
+  // ── Color picker (built imperatively so .value can be pre-set) ──
+  const colorRow = document.createElement("div");
+  colorRow.className = "env-card__color-row";
+
+  const colorPicker = document.createElement("sp-picker");
+  colorPicker.className = "env-card__color-picker";
+  colorPicker.setAttribute("label", "Environment Color");
+  colorPicker.setAttribute("size", "m");
+
+  const colorOptions = [
+    { value: "",           label: "None" },
+    { value: "gray",       label: "Gray" },
+    { value: "red",        label: "Red" },
+    { value: "orange",     label: "Orange" },
+    { value: "yellow",     label: "Yellow" },
+    { value: "chartreuse", label: "Chartreuse" },
+    { value: "celery",     label: "Celery" },
+    { value: "green",      label: "Green" },
+    { value: "seafoam",    label: "Seafoam" },
+    { value: "blue",       label: "Blue" },
+    { value: "indigo",     label: "Indigo" },
+    { value: "purple",     label: "Purple" },
+    { value: "fuchsia",    label: "Fuchsia" },
+    { value: "magenta",    label: "Magenta" },
+  ];
+
+  for (const { value, label } of colorOptions) {
+    const item = document.createElement("sp-menu-item");
+    item.value = value;
+    item.textContent = label;
+    colorPicker.appendChild(item);
+  }
+
+  // Pre-select saved color (must be set after items are appended)
+  colorPicker.value = config.color || "";
+
+  colorRow.appendChild(colorPicker);
+  card.appendChild(colorRow);
+
+  card.querySelector(".env-card__move-up").addEventListener("click", () => {
+    const prev = card.previousElementSibling;
+    if (prev) list.insertBefore(card, prev);
+  });
+  card.querySelector(".env-card__move-down").addEventListener("click", () => {
+    const next = card.nextElementSibling;
+    if (next) list.insertBefore(next, card);
+  });
+  card.querySelector(".env-card__remove").addEventListener("click", () => card.remove());
 
   list.appendChild(card);
 
@@ -228,12 +280,7 @@ async function saveEnvs() {
   const seen  = new Set();
 
   for (const card of cards) {
-    let key;
-    if (card.classList.contains("env-card--builtin")) {
-      key = card.dataset.envKey;
-    } else {
-      key = (card.querySelector(".env-card__name-input")?.value || "").trim().toLowerCase();
-    }
+    const key = (card.querySelector(".env-card__name-input")?.value || "").trim();
 
     if (!key) {
       return _showStatus("envs-status", "error", "One or more environments is missing a name.");
@@ -248,7 +295,9 @@ async function saveEnvs() {
 
     const author  = (card.querySelector(".env-card__author")?.value  || "").trim().replace(/\/$/, "");
     const publish = (card.querySelector(".env-card__publish")?.value || "").trim().replace(/\/$/, "");
-    envs[key] = { author, publish };
+    const color   = card.querySelector(".env-card__color-picker")?.value || "";
+    const order   = [...cards].indexOf(card);
+    envs[key] = { author, publish, color: color || null, order };
   }
 
   await chrome.storage.sync.set({ envs });

@@ -6,7 +6,6 @@ sidebar:
 - move instructional text into tooltip+overlay (contextual-help?) or help-text 
 
 popup:
-- Change Environment Switcher Background based on which env. Add color swatches to settings.
 - in Context menu, put instance text in a badge (or sp-status-light)
 - add Links to tools: (CRX, Package Mgr, OSGi Configs) (use sp-action-menu) [md]
 - Update extension Icon based on environment (e.g. grey local, yellow dev, orange qa, blue stage, green prod) OR add color swatch to settings, for each env. [md]

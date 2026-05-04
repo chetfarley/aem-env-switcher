@@ -32,7 +32,6 @@ body.popup {
 
 .titlebar__env sp-picker {
   width: 33%;
-  /* --spectrum-picker-width: 148px; */
 }
 
 .titlebar__divider {
@@ -96,8 +95,8 @@ body.popup {
 
 /* Active: currently viewing this instance in the selected env */
 .instance-card.is-active {
-  background: var(--spectrum-blue-100);
-  border-bottom-color: var(--spectrum-accent-color-700);
+  background: var(--instance-card-background--active);
+  border-bottom-color: var(--instance-card-border--active);
   opacity: 1; /* override disabled state if both active and unavailable */
 }
 
@@ -108,7 +107,7 @@ body.popup {
 }
 
 .instance-card.is-active .instance-card__icon {
-  color: var(--spectrum-accent-color-800);
+  color: var(--instance-card-icon--active);
 }
 
 .instance-card__label {
@@ -122,7 +121,7 @@ body.popup {
 }
 
 .instance-card.is-active .instance-card__label {
-  color: var(--spectrum-accent-color-900);
+  color: var(--instance-card-text--active);
 }
 
 /* Chevron — shown only when .published-anchor has .has-dropdown */

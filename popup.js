@@ -441,6 +441,16 @@ const ENV_ORDER = ["localhost", "dev", "qa", "stage", "prod"];
  */
 function sortedEnvEntries(envs) {
   const hasUrl = ([, cfg]) => (cfg.author || "").trim() || (cfg.publish || "").trim();
+
+  // If any env has an explicit `order` field, sort all by that (missing = Infinity).
+  const hasOrderField = Object.values(envs).some(cfg => typeof cfg.order === "number");
+  if (hasOrderField) {
+    return Object.entries(envs)
+      .filter(hasUrl)
+      .sort(([, a], [, b]) => (a.order ?? Infinity) - (b.order ?? Infinity));
+  }
+
+  // Legacy: no order fields — use ENV_ORDER then alphabetical.
   const known  = ENV_ORDER.filter(k => envs[k]).map(k => [k, envs[k]]).filter(hasUrl);
   const custom = Object.entries(envs)
     .filter(([k]) => !ENV_ORDER.includes(k))
@@ -550,7 +560,7 @@ function sortedEnvEntries(envs) {
       if (!firstKey) firstKey = key;
       const opt = document.createElement("sp-menu-item");
       opt.value = key;
-      opt.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+      opt.textContent = key;
       envSelect.appendChild(opt);
     }
 
@@ -561,6 +571,20 @@ function sortedEnvEntries(envs) {
 
     // Set picker value after options are in the DOM.
     envSelect.value = _selectedEnv;
+    applyEnvColor();
+  }
+
+  /** Stamp data-env-color on <sp-theme> so all themed children — the env
+   *  picker trigger and instance cards — inherit the correct color tokens.
+   *  Must target sp-theme (not body) because --spectrum-* tokens are only
+   *  available within sp-theme's cascade, not above it. */
+  function applyEnvColor() {
+    const color = (_envs[_selectedEnv]?.color) || "";
+    if (color) {
+      spTheme.dataset.envColor = color;
+    } else {
+      delete spTheme.dataset.envColor;
+    }
   }
 
   // ── Action buttons ──────────────────────────────────────────────────────────
@@ -749,6 +773,7 @@ function sortedEnvEntries(envs) {
   // Env dropdown — stay on same instance type, switch target environment.
   envSelect.addEventListener("change", () => {
     _selectedEnv = envSelect.value;
+    applyEnvColor();
     renderActions();
   });
 

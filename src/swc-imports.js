@@ -58,6 +58,7 @@ import "@spectrum-web-components/icons-workflow/icons/sp-icon-add.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-delete.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-remove.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-down.js";
+import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-up.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-chevron-right.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-info.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-alert.js";

@@ -139,11 +139,6 @@ sp-tab-panel[selected] {
   transition: border-color 0.15s;
 }
 
-.env-card--builtin {
-  background: var(--spectrum-gray-75);
-  border-color: var(--spectrum-accent-color-400);
-}
-
 .env-card__header {
   display: flex;
   align-items: center;
@@ -160,6 +155,18 @@ sp-tab-panel[selected] {
   flex: 1;
 }
 
+.env-card__reorder {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.env-card__reorder sp-action-button {
+  --spectrum-actionbutton-height: 20px;
+  --spectrum-actionbutton-icon-size: 14px;
+}
+
 .env-card__remove {
   flex-shrink: 0;
   color: var(--spectrum-negative-color-800);
@@ -169,6 +176,15 @@ sp-tab-panel[selected] {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+}
+
+.env-card__color-row {
+  display: flex;
+  align-items: center;
+}
+
+.env-card__color-picker {
+  width: 100%;
 }
 
 /* Stack to single column on narrow side panels */

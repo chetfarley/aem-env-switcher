@@ -38,7 +38,12 @@ sp-button[disabled] {
   pointer-events: none;
 }
 
-/* ── Picker Menus ────────────────────────────────────────────────────────── */
+/* ── titlebar env picker ─────────────────────────────────────────────────── */
+
+#envSelect {
+  --mod-picker-font-weight: var(--spectrum-bold-font-weight);
+}
+
 
 /* Spectrum's constructed stylesheet sets max-height:100% on the sp-popover and
    sp-menu :host, clamping the dropdown to perceived available space. Since
