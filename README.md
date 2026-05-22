@@ -29,7 +29,7 @@ A Chrome (and Firefox) extension for AEM developers and authors to quickly switc
 
 1. Click the **Settings** (⚙) icon in the popup title bar, or open the Chrome side panel
 2. Under the **Environments** tab, set the Author and Publish base URLs for each environment
-3. Use **Add Environment** to create a custom entry; built-in environments (localhost, dev, qa, stage, prod) cannot be renamed or deleted
+3. Use **Add Environment** to create a custom entry
 4. Click **Save Environments**
 
 ### Configuring Language Masters & Live Copies

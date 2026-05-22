@@ -2,11 +2,11 @@ TODOs
 
 
 sidebar:
-- add labels & restyle placeholder text
 - move Export/Import into list (sp-action-menu) next to Close icon
 - move instructional text into tooltip+overlay (contextual-help?) or help-text 
-- add background color to match panel
-- add color swatch to colors fields
+- make tabs also docked on scroll?
+- Masters & Live Copies > minus icon to remove live copy should be a trash can icon, or X
+- masters & live copies > fix blue borders around input groups
 
 popup:
 - in Context menu, put instance text in a badge (or sp-status-light)

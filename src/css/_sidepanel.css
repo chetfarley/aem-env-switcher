@@ -131,39 +131,55 @@ sp-tab-panel[selected] {
 .env-card {
   border: 1px solid var(--spectrum-gray-300);
   border-radius: 8px;
-  background: var(--spectrum-gray-100);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 14px 16px;
-  transition: border-color 0.15s;
 }
 
 .env-card__header {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding: 10px 12px;
+  background: var(--spectrum-gray-200);
+  transition: background 0.15s, border-color 0.15s;
 }
 
-.env-card__name {
-  flex: 1;
-  font-weight: 600;
-  font-size: 14px;
-}
-
-/* Label + field stacked pair */
-.sp-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sp-field sp-textfield {
-  width: 100%;
-}
+.env-card__header[data-env-color="gray"]       { background: var(--spectrum-gray-300); }
+.env-card__header[data-env-color="red"]        { background: var(--spectrum-red-200); }
+.env-card__header[data-env-color="orange"]     { background: var(--spectrum-orange-200); }
+.env-card__header[data-env-color="yellow"]     { background: var(--spectrum-yellow-200); }
+.env-card__header[data-env-color="chartreuse"] { background: var(--spectrum-chartreuse-200); }
+.env-card__header[data-env-color="celery"]     { background: var(--spectrum-celery-200); }
+.env-card__header[data-env-color="green"]      { background: var(--spectrum-green-200); }
+.env-card__header[data-env-color="seafoam"]    { background: var(--spectrum-seafoam-200); }
+.env-card__header[data-env-color="blue"]       { background: var(--spectrum-blue-200); }
+.env-card__header[data-env-color="indigo"]     { background: var(--spectrum-indigo-200); }
+.env-card__header[data-env-color="purple"]     { background: var(--spectrum-purple-200); }
+.env-card__header[data-env-color="fuchsia"]    { background: var(--spectrum-fuchsia-200); }
+.env-card__header[data-env-color="magenta"]    { background: var(--spectrum-magenta-200); }
 
 .env-card__name-wrap {
   flex: 1;
+  min-width: 0;
+}
+
+/* .env-card__name-static {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--spectrum-gray-900);
+} */
+
+.env-card__name-input {
+  width: 100%;
+}
+
+.env-card__collapse {
+  flex-shrink: 0;
 }
 
 .env-card__reorder {
@@ -183,15 +199,42 @@ sp-tab-panel[selected] {
   color: var(--spectrum-negative-color-800);
 }
 
+.env-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--spectrum-gray-100);
+  border-top: 1px solid var(--spectrum-gray-300);
+  max-height: 2000px;
+  transition: max-height 0.25s ease, padding 0.2s ease, opacity 0.2s ease;
+  opacity: 1;
+}
+
+.env-card__body--collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-top-color: transparent;
+}
+
+/* Label + field stacked pair */
+.sp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sp-field sp-textfield {
+  width: 100%;
+}
+
 .env-card__fields {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-}
-
-.env-card__color-row {
-  display: flex;
-  align-items: center;
 }
 
 .env-card__color-picker {
@@ -210,7 +253,7 @@ sp-tab-panel[selected] {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .lm-card {
-  border: 1px solid var(--spectrum-accent-color-400);
+  border: 1px solid var(--spectrum-gray-300);
   border-radius: 8px;
   background: var(--spectrum-gray-75);
   overflow: hidden;

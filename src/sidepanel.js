@@ -174,17 +174,26 @@ function appendEnvCard({ key, config, isNew }) {
   card.className = "env-card";
   card.dataset.envKey = key;
 
+  const bodyCollapsedClass = isNew ? "" : " env-card__body--collapsed";
+  const chevronIcon        = isNew ? "sp-icon-chevron-down" : "sp-icon-chevron-right";
+  const ariaExpanded       = isNew ? "true" : "false";
+
   card.innerHTML = `
     <div class="env-card__header">
-      <div class="sp-field env-card__name-wrap">
-        <sp-field-label>Name</sp-field-label>
+      <div class="env-card__name-wrap">
+        <!-- Quiet (borderless) textfield -->
         <sp-textfield
+          quiet
+          placeholder="Environment Name"
           class="env-card__name-input"
           value="${_esc(key)}"
           maxlength="32"
           help-text="Letters, numbers, - _ only"
         ></sp-textfield>
       </div>
+      <sp-action-button class="env-card__collapse" quiet type="button" title="Toggle fields" aria-expanded="${ariaExpanded}">
+        <${chevronIcon} slot="icon"></${chevronIcon}>
+      </sp-action-button>
       <div class="env-card__reorder">
         <sp-action-button class="env-card__move-up" quiet type="button" title="Move up">
           <sp-icon-chevron-up slot="icon"></sp-icon-chevron-up>
@@ -197,29 +206,34 @@ function appendEnvCard({ key, config, isNew }) {
         <sp-icon-delete slot="icon"></sp-icon-delete>
       </sp-action-button>
     </div>
-    <div class="env-card__fields">
-      <div class="sp-field">
-        <sp-field-label>Author URL</sp-field-label>
-        <sp-textfield
-          class="env-card__author"
-          type="url"
-          value="${_esc(config.author || "")}"
-          placeholder="https://author.example.com"
-          help-text="No trailing slash"
-        ></sp-textfield>
-      </div>
-      <div class="sp-field">
-        <sp-field-label>Publish URL</sp-field-label>
-        <sp-textfield
-          class="env-card__publish"
-          type="url"
-          value="${_esc(config.publish || "")}"
-          placeholder="https://www.example.com"
-          help-text="No trailing slash"
-        ></sp-textfield>
+    <div class="env-card__body${bodyCollapsedClass}">
+      <div class="env-card__fields">
+        <div class="sp-field">
+          <sp-field-label>Author URL</sp-field-label>
+          <sp-textfield
+            class="env-card__author"
+            type="url"
+            value="${_esc(config.author || "")}"
+            placeholder="https://author.example.com"
+            help-text="No trailing slash"
+          ></sp-textfield>
+        </div>
+        <div class="sp-field">
+          <sp-field-label>Publish URL</sp-field-label>
+          <sp-textfield
+            class="env-card__publish"
+            type="url"
+            value="${_esc(config.publish || "")}"
+            placeholder="https://www.example.com"
+            help-text="No trailing slash"
+          ></sp-textfield>
+        </div>
       </div>
     </div>
   `;
+
+  const header = card.querySelector(".env-card__header");
+  const body   = card.querySelector(".env-card__body");
 
   // ── Color picker (built imperatively so .value can be pre-set) ──
   const colorRow = document.createElement("div");
@@ -268,9 +282,28 @@ function appendEnvCard({ key, config, isNew }) {
   // Pre-select saved color (must be set after items are appended)
   colorPicker.value = config.color || "";
 
-  colorRow.appendChild(colorPicker);
-  card.appendChild(colorRow);
+  // Reflect color onto the header for CSS theming
+  if (config.color) header.dataset.envColor = config.color;
+  colorPicker.addEventListener("change", () => {
+    const c = colorPicker.value;
+    if (c) header.dataset.envColor = c;
+    else delete header.dataset.envColor;
+  });
 
+  colorRow.appendChild(colorPicker);
+  body.appendChild(colorRow);
+
+  // ── Collapse ──
+  const collapseBtn = card.querySelector(".env-card__collapse");
+  collapseBtn.addEventListener("click", () => {
+    const collapsed = body.classList.toggle("env-card__body--collapsed");
+    collapseBtn.setAttribute("aria-expanded", String(!collapsed));
+    const oldIcon = collapseBtn.querySelector("[slot='icon']");
+    if (oldIcon) oldIcon.remove();
+    const newIcon = document.createElement(collapsed ? "sp-icon-chevron-right" : "sp-icon-chevron-down");
+    newIcon.setAttribute("slot", "icon");
+    collapseBtn.appendChild(newIcon);
+  });
 
   card.querySelector(".env-card__move-up").addEventListener("click", () => {
     const prev = card.previousElementSibling;
@@ -351,7 +384,7 @@ function appendLmCard({ masterPath, liveCopies }) {
   const pathWrap = document.createElement("div");
   pathWrap.className = "sp-field lm-card__path-wrap";
   const pathLabel = document.createElement("sp-field-label");
-  pathLabel.textContent = "Language Master JCR Path";
+  pathLabel.textContent = "Language Master Path";
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lm-card__path";
   pathField.setAttribute("value", _esc(masterPath || ""));
@@ -443,7 +476,7 @@ function makeLcRow({ label, path, maskedPath }) {
   const labelWrap = document.createElement("div");
   labelWrap.className = "sp-field lc-row__label-wrap";
   const labelFieldLabel = document.createElement("sp-field-label");
-  labelFieldLabel.textContent = "Label";
+  labelFieldLabel.textContent = "Site Name";
   const labelField = document.createElement("sp-textfield");
   labelField.className = "lc-row__label";
   labelField.setAttribute("value", _esc(label || ""));
@@ -454,7 +487,7 @@ function makeLcRow({ label, path, maskedPath }) {
   const pathWrap = document.createElement("div");
   pathWrap.className = "sp-field lc-row__path-wrap";
   const pathFieldLabel = document.createElement("sp-field-label");
-  pathFieldLabel.textContent = "Live Copy JCR Path";
+  pathFieldLabel.textContent = "Live Copy Path";
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lc-row__path";
   pathField.setAttribute("value", _esc(path || ""));
