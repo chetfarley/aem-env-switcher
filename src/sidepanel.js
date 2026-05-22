@@ -388,7 +388,7 @@ function appendLmCard({ masterPath, liveCopies }) {
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lm-card__path";
   pathField.setAttribute("value", _esc(masterPath || ""));
-  pathField.setAttribute("placeholder", "/content/site/language-masters/en-us");
+  pathField.setAttribute("placeholder", 'e.g. "/content/site/language-masters/[locale]"');
   pathField.setAttribute("help-text", "Full JCR path — no trailing slash");
   pathWrap.append(pathLabel, pathField);
 
@@ -450,7 +450,7 @@ function appendLmCard({ masterPath, liveCopies }) {
   });
 
   addLcBtn.addEventListener("click", () => {
-    lcList.appendChild(makeLcRow({ label: "", path: "", maskedPath: "" }));
+    lcList.appendChild(makeLcRow({ siteName: "", path: "", maskedPath: "" }));
     requestAnimationFrame(() =>
       lcList.lastElementChild?.scrollIntoView({ behavior: "smooth", block: "nearest" })
     );
@@ -469,20 +469,20 @@ function appendLmCard({ masterPath, liveCopies }) {
   }
 }
 
-function makeLcRow({ label, path, maskedPath }) {
+function makeLcRow({ siteName, path, maskedPath }) {
   const row = document.createElement("div");
   row.className = "lc-row";
 
-  const labelWrap = document.createElement("div");
-  labelWrap.className = "sp-field lc-row__label-wrap";
-  const labelFieldLabel = document.createElement("sp-field-label");
-  labelFieldLabel.textContent = "Site Name";
-  const labelField = document.createElement("sp-textfield");
-  labelField.className = "lc-row__label";
-  labelField.setAttribute("value", _esc(label || ""));
-  labelField.setAttribute("placeholder", "NA \u2013 English (US)");
-  labelField.setAttribute("maxlength", "64");
-  labelWrap.append(labelFieldLabel, labelField);
+  const siteNameWrap = document.createElement("div");
+  siteNameWrap.className = "sp-field lc-row__site-name-wrap";
+  const siteNameFieldLabel = document.createElement("sp-field-label");
+  siteNameFieldLabel.textContent = "Site Name";
+  const siteNameField = document.createElement("sp-textfield");
+  siteNameField.className = "lc-row__site-name";
+  siteNameField.setAttribute("value", _esc(siteName || ""));
+  siteNameField.setAttribute("placeholder", 'e.g. "US English"');
+  siteNameField.setAttribute("maxlength", "64");
+  siteNameWrap.append(siteNameFieldLabel, siteNameField);
 
   const pathWrap = document.createElement("div");
   pathWrap.className = "sp-field lc-row__path-wrap";
@@ -491,7 +491,7 @@ function makeLcRow({ label, path, maskedPath }) {
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lc-row__path";
   pathField.setAttribute("value", _esc(path || ""));
-  pathField.setAttribute("placeholder", "/content/site/websites/na/en-us");
+  pathField.setAttribute("placeholder", 'e.g. "/content/site/websites/[region]/[locale]"');
   pathWrap.append(pathFieldLabel, pathField);
 
   const maskedWrap = document.createElement("div");
@@ -501,7 +501,7 @@ function makeLcRow({ label, path, maskedPath }) {
   const maskedField = document.createElement("sp-textfield");
   maskedField.className = "lc-row__masked";
   maskedField.setAttribute("value", _esc(maskedPath || ""));
-  maskedField.setAttribute("placeholder", "/en-us");
+  maskedField.setAttribute("placeholder", 'e.g. "/en-us"');
   maskedField.setAttribute("help-text", "Leave blank to auto-derive");
   maskedWrap.append(maskedFieldLabel, maskedField);
 
@@ -515,7 +515,7 @@ function makeLcRow({ label, path, maskedPath }) {
   removeBtn.appendChild(_lcRemoveIcon);
   removeBtn.addEventListener("click", () => row.remove());
 
-  row.append(labelWrap, pathWrap, maskedWrap, removeBtn);
+  row.append(siteNameWrap, removeBtn, pathWrap, maskedWrap);
   return row;
 }
 
@@ -541,21 +541,21 @@ async function saveI18n() {
     const seenLcPaths = new Set();
 
     for (const row of card.querySelectorAll(".lc-row")) {
-      const label      = (row.querySelector(".lc-row__label")?.value  || "").trim();
+      const siteName   = (row.querySelector(".lc-row__site-name")?.value  || "").trim();
       const path       = _normPath(row.querySelector(".lc-row__path")?.value || "");
       const maskedPath = _normPath(row.querySelector(".lc-row__masked")?.value || "");
 
-      if (!label) {
-        return _showStatus("i18n-status", "error", `A Live Copy under "${masterPath}" is missing a label.`);
+      if (!siteName) {
+        return _showStatus("i18n-status", "error", `A Live Copy under "${masterPath}" is missing a site name.`);
       }
       if (!path) {
-        return _showStatus("i18n-status", "error", `Live Copy "${label}" is missing a JCR path.`);
+        return _showStatus("i18n-status", "error", `Live Copy "${siteName}" is missing a JCR path.`);
       }
       if (seenLcPaths.has(path)) {
         return _showStatus("i18n-status", "error", `Duplicate Live Copy path "${path}" under "${masterPath}".`);
       }
       seenLcPaths.add(path);
-      liveCopies.push({ label, path, maskedPath });
+      liveCopies.push({ siteName, path, maskedPath });
     }
 
     i18nMappings.push({ masterPath, liveCopies });
