@@ -42,6 +42,9 @@ import "@spectrum-web-components/toast/sp-toast.js";
 import "@spectrum-web-components/dialog/sp-dialog.js";
 import "@spectrum-web-components/dialog/sp-dialog-wrapper.js";
 
+// ── Swatch ────────────────────────────────────────────────────────────────────
+import "@spectrum-web-components/swatch/sp-swatch.js";
+
 // ── Layout & Decoration ───────────────────────────────────────────────────────
 import "@spectrum-web-components/divider/sp-divider.js";
 import "@spectrum-web-components/icon/sp-icon.js";

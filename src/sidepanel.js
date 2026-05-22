@@ -176,13 +176,15 @@ function appendEnvCard({ key, config, isNew }) {
 
   card.innerHTML = `
     <div class="env-card__header">
-      <sp-textfield
-        class="env-card__name-input"
-        label="Name"
-        value="${_esc(key)}"
-        maxlength="32"
-        help-text="Letters, numbers, - _ only"
-      ></sp-textfield>
+      <div class="sp-field env-card__name-wrap">
+        <sp-field-label>Name</sp-field-label>
+        <sp-textfield
+          class="env-card__name-input"
+          value="${_esc(key)}"
+          maxlength="32"
+          help-text="Letters, numbers, - _ only"
+        ></sp-textfield>
+      </div>
       <div class="env-card__reorder">
         <sp-action-button class="env-card__move-up" quiet type="button" title="Move up">
           <sp-icon-chevron-up slot="icon"></sp-icon-chevron-up>
@@ -196,55 +198,70 @@ function appendEnvCard({ key, config, isNew }) {
       </sp-action-button>
     </div>
     <div class="env-card__fields">
-      <sp-textfield
-        class="env-card__author"
-        type="url"
-        label="Author URL"
-        value="${_esc(config.author || "")}"
-        placeholder="https://author.example.com"
-        help-text="No trailing slash"
-      ></sp-textfield>
-      <sp-textfield
-        class="env-card__publish"
-        type="url"
-        label="Publish URL"
-        value="${_esc(config.publish || "")}"
-        placeholder="https://www.example.com"
-        help-text="No trailing slash"
-      ></sp-textfield>
+      <div class="sp-field">
+        <sp-field-label>Author URL</sp-field-label>
+        <sp-textfield
+          class="env-card__author"
+          type="url"
+          value="${_esc(config.author || "")}"
+          placeholder="https://author.example.com"
+          help-text="No trailing slash"
+        ></sp-textfield>
+      </div>
+      <div class="sp-field">
+        <sp-field-label>Publish URL</sp-field-label>
+        <sp-textfield
+          class="env-card__publish"
+          type="url"
+          value="${_esc(config.publish || "")}"
+          placeholder="https://www.example.com"
+          help-text="No trailing slash"
+        ></sp-textfield>
+      </div>
     </div>
   `;
 
   // ── Color picker (built imperatively so .value can be pre-set) ──
   const colorRow = document.createElement("div");
-  colorRow.className = "env-card__color-row";
+  colorRow.className = "sp-field env-card__color-row";
+
+  const colorLabel = document.createElement("sp-field-label");
+  colorLabel.textContent = "Environment Color";
+  colorRow.appendChild(colorLabel);
 
   const colorPicker = document.createElement("sp-picker");
   colorPicker.className = "env-card__color-picker";
-  colorPicker.setAttribute("label", "Environment Color");
   colorPicker.setAttribute("size", "m");
 
   const colorOptions = [
-    { value: "",           label: "None" },
-    { value: "gray",       label: "Gray" },
-    { value: "red",        label: "Red" },
-    { value: "orange",     label: "Orange" },
-    { value: "yellow",     label: "Yellow" },
-    { value: "chartreuse", label: "Chartreuse" },
-    { value: "celery",     label: "Celery" },
-    { value: "green",      label: "Green" },
-    { value: "seafoam",    label: "Seafoam" },
-    { value: "blue",       label: "Blue" },
-    { value: "indigo",     label: "Indigo" },
-    { value: "purple",     label: "Purple" },
-    { value: "fuchsia",    label: "Fuchsia" },
-    { value: "magenta",    label: "Magenta" },
+    { value: "",           label: "None",       swatch: null },
+    { value: "gray",       label: "Gray",       swatch: "var(--spectrum-gray-200)" },
+    { value: "red",        label: "Red",        swatch: "var(--spectrum-red-200)" },
+    { value: "orange",     label: "Orange",     swatch: "var(--spectrum-orange-200)" },
+    { value: "yellow",     label: "Yellow",     swatch: "var(--spectrum-yellow-200)" },
+    { value: "chartreuse", label: "Chartreuse", swatch: "var(--spectrum-chartreuse-200)" },
+    { value: "celery",     label: "Celery",     swatch: "var(--spectrum-celery-200)" },
+    { value: "green",      label: "Green",      swatch: "var(--spectrum-green-200)" },
+    { value: "seafoam",    label: "Seafoam",    swatch: "var(--spectrum-seafoam-200)" },
+    { value: "blue",       label: "Blue",       swatch: "var(--spectrum-blue-200)" },
+    { value: "indigo",     label: "Indigo",     swatch: "var(--spectrum-indigo-200)" },
+    { value: "purple",     label: "Purple",     swatch: "var(--spectrum-purple-200)" },
+    { value: "fuchsia",    label: "Fuchsia",    swatch: "var(--spectrum-fuchsia-200)" },
+    { value: "magenta",    label: "Magenta",    swatch: "var(--spectrum-magenta-200)" },
   ];
 
-  for (const { value, label } of colorOptions) {
+  for (const { value, label, swatch } of colorOptions) {
     const item = document.createElement("sp-menu-item");
     item.value = value;
     item.textContent = label;
+    if (swatch) {
+      const sw = document.createElement("sp-swatch");
+      sw.setAttribute("slot", "icon");
+      sw.setAttribute("color", swatch);
+      sw.setAttribute("rounding", "full");
+      sw.setAttribute("size", "xs");
+      item.appendChild(sw);
+    }
     colorPicker.appendChild(item);
   }
 
@@ -253,6 +270,7 @@ function appendEnvCard({ key, config, isNew }) {
 
   colorRow.appendChild(colorPicker);
   card.appendChild(colorRow);
+
 
   card.querySelector(".env-card__move-up").addEventListener("click", () => {
     const prev = card.previousElementSibling;
@@ -330,12 +348,16 @@ function appendLmCard({ masterPath, liveCopies }) {
   const header = document.createElement("div");
   header.className = "lm-card__header";
 
+  const pathWrap = document.createElement("div");
+  pathWrap.className = "sp-field lm-card__path-wrap";
+  const pathLabel = document.createElement("sp-field-label");
+  pathLabel.textContent = "Language Master JCR Path";
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lm-card__path";
-  pathField.setAttribute("label", "Language Master JCR Path");
   pathField.setAttribute("value", _esc(masterPath || ""));
   pathField.setAttribute("placeholder", "/content/site/language-masters/en-us");
   pathField.setAttribute("help-text", "Full JCR path — no trailing slash");
+  pathWrap.append(pathLabel, pathField);
 
   const collapseBtn = document.createElement("sp-action-button");
   collapseBtn.className = "lm-card__collapse";
@@ -356,7 +378,7 @@ function appendLmCard({ masterPath, liveCopies }) {
   _removeIcon.setAttribute("slot", "icon");
   removeBtn.appendChild(_removeIcon);
 
-  header.append(pathField, collapseBtn, removeBtn);
+  header.append(pathWrap, collapseBtn, removeBtn);
 
   // ── Body ──
   const body = document.createElement("div");
@@ -418,25 +440,37 @@ function makeLcRow({ label, path, maskedPath }) {
   const row = document.createElement("div");
   row.className = "lc-row";
 
+  const labelWrap = document.createElement("div");
+  labelWrap.className = "sp-field lc-row__label-wrap";
+  const labelFieldLabel = document.createElement("sp-field-label");
+  labelFieldLabel.textContent = "Label";
   const labelField = document.createElement("sp-textfield");
   labelField.className = "lc-row__label";
-  labelField.setAttribute("label", "Label");
   labelField.setAttribute("value", _esc(label || ""));
   labelField.setAttribute("placeholder", "NA \u2013 English (US)");
   labelField.setAttribute("maxlength", "64");
+  labelWrap.append(labelFieldLabel, labelField);
 
+  const pathWrap = document.createElement("div");
+  pathWrap.className = "sp-field lc-row__path-wrap";
+  const pathFieldLabel = document.createElement("sp-field-label");
+  pathFieldLabel.textContent = "Live Copy JCR Path";
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lc-row__path";
-  pathField.setAttribute("label", "Live Copy JCR Path");
   pathField.setAttribute("value", _esc(path || ""));
   pathField.setAttribute("placeholder", "/content/site/websites/na/en-us");
+  pathWrap.append(pathFieldLabel, pathField);
 
+  const maskedWrap = document.createElement("div");
+  maskedWrap.className = "sp-field lc-row__masked-wrap";
+  const maskedFieldLabel = document.createElement("sp-field-label");
+  maskedFieldLabel.textContent = "Masked Path";
   const maskedField = document.createElement("sp-textfield");
   maskedField.className = "lc-row__masked";
-  maskedField.setAttribute("label", "Masked Path (optional)");
   maskedField.setAttribute("value", _esc(maskedPath || ""));
   maskedField.setAttribute("placeholder", "/en-us");
   maskedField.setAttribute("help-text", "Leave blank to auto-derive");
+  maskedWrap.append(maskedFieldLabel, maskedField);
 
   const removeBtn = document.createElement("sp-action-button");
   removeBtn.className = "lc-row__remove";
@@ -448,7 +482,7 @@ function makeLcRow({ label, path, maskedPath }) {
   removeBtn.appendChild(_lcRemoveIcon);
   removeBtn.addEventListener("click", () => row.remove());
 
-  row.append(labelField, pathField, maskedField, removeBtn);
+  row.append(labelWrap, pathWrap, maskedWrap, removeBtn);
   return row;
 }
 

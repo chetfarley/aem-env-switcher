@@ -59,3 +59,35 @@ sp-menu {
   height: auto !important;
   max-height: 135px !important;
 }
+
+/* ── Swatch system token layer ─────────────────────────────────────────────── */
+
+/* The sp-swatch package references --system-swatch-* tokens that are meant to
+   be provided by a "system layer" in sp-theme, but that layer is entirely
+   absent from the v0.48 build — the tokens are not defined anywhere in the
+   installed package tree. We use --mod-swatch-* (the component's public API,
+   read before the broken --spectrum-swatch-* → --system-swatch-* chain) to
+   supply the values directly on sp-theme so they inherit to all swatches. */
+sp-theme {
+  /* Sizes */
+  --mod-swatch-size:                          var(--spectrum-swatch-size-medium, 32px);
+  /* Border */
+  --mod-swatch-border-radius:                 var(--spectrum-corner-radius-100, 2px);
+  --mod-swatch-border-thickness:              1px;
+  --mod-swatch-border-thickness-selected:     2px;
+  --mod-swatch-border-color:                  rgba(0, 0, 0, 0.13);
+  --mod-swatch-border-color-light:            rgba(0, 0, 0, 0.13);
+  --mod-swatch-border-color-selected:         var(--spectrum-neutral-content-color-default);
+  --mod-swatch-inner-border-color-selected:   var(--spectrum-gray-50);
+  /* Focus ring */
+  --mod-swatch-focus-indicator-thickness:     var(--spectrum-focus-indicator-thickness, 2px);
+  --mod-swatch-focus-indicator-gap:           var(--spectrum-focus-indicator-gap, 2px);
+  --mod-swatch-focus-indicator-border-radius: var(--spectrum-corner-radius-100, 2px);
+  --mod-swatch-focus-indicator-color:         var(--spectrum-focus-indicator-color);
+}
+
+/* Per-size overrides via mod tokens (no system layer needed) */
+sp-swatch[size="xs"] { --mod-swatch-size: 16px; }
+sp-swatch[size="s"]  { --mod-swatch-size: 24px; }
+sp-swatch[size="l"]  { --mod-swatch-size: 40px; }
+

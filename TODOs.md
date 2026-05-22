@@ -2,8 +2,11 @@ TODOs
 
 
 sidebar:
-- move Export/Import into list (sp-action-menu). Add Close icon next to this. Remove "AEM Environment Switcher" heading bar. 
+- add labels & restyle placeholder text
+- move Export/Import into list (sp-action-menu) next to Close icon
 - move instructional text into tooltip+overlay (contextual-help?) or help-text 
+- add background color to match panel
+- add color swatch to colors fields
 
 popup:
 - in Context menu, put instance text in a badge (or sp-status-light)

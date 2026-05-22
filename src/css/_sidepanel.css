@@ -151,7 +151,18 @@ sp-tab-panel[selected] {
   font-size: 14px;
 }
 
-.env-card__name-input {
+/* Label + field stacked pair */
+.sp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sp-field sp-textfield {
+  width: 100%;
+}
+
+.env-card__name-wrap {
   flex: 1;
 }
 
@@ -213,7 +224,7 @@ sp-tab-panel[selected] {
   background: var(--spectrum-gray-100);
 }
 
-.lm-card__path {
+.lm-card__path-wrap {
   flex: 1;
 }
 
@@ -271,9 +282,9 @@ sp-tab-panel[selected] {
   flex-wrap: wrap;
 }
 
-.lc-row__label  { flex: 0 0 160px; }
-.lc-row__path   { flex: 1 1 220px; min-width: 160px; }
-.lc-row__masked { flex: 0 0 140px; }
+.lc-row__label-wrap  { flex: 0 0 160px; }
+.lc-row__path-wrap   { flex: 1 1 220px; min-width: 160px; }
+.lc-row__masked-wrap { flex: 0 0 140px; }
 
 .lc-row__remove {
   color: var(--spectrum-negative-color-800);
