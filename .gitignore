@@ -1,5 +1,9 @@
 node_modules/
 
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
 # Build outputs — regenerate with: npm run build
 swc-bundle.js
 md-bundle.js
