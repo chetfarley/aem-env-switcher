@@ -50,9 +50,13 @@ async function init() {
   });
   document.getElementById("add-lm-btn").addEventListener("click", () => appendLmCard({ masterPath: "", liveCopies: [] }));
 
-  // Export / Import
-  document.getElementById("export-btn").addEventListener("click", () => exportConfig());
-  document.getElementById("import-btn").addEventListener("click", () => document.getElementById("import-file").click());
+  // Export / Import menu
+  const ioMenu = document.getElementById("io-menu");
+  ioMenu.addEventListener("change", (e) => {
+    const val = e.target.value;
+    if (val === "export") exportConfig();
+    if (val === "import") document.getElementById("import-file").click();
+  });
   document.getElementById("import-file").addEventListener("change", (e) => importConfig(e));
 }
 
@@ -109,7 +113,12 @@ async function importConfig(e) {
     if (typeof val !== "object" || !("author" in val) || !("publish" in val)) {
       return _showStatus("io-status", "error", `Environment "${key}" is missing author/publish.`);
     }
-    envsToImport[key] = { author: val.author || "", publish: val.publish || "" };
+    envsToImport[key] = {
+      author:  val.author  || "",
+      publish: val.publish || "",
+      color:   val.color   || null,
+      order:   typeof val.order === "number" ? val.order : 999,
+    };
   }
 
   // Resolve i18n — prefer v2, attempt legacy migration from v1 globalConfig
@@ -142,7 +151,7 @@ function _migrateGlobalConfig({ localePath = "", languageMasterPath = "" }) {
   const masterPath = "/" + languageMasterPath.replace(/^\/|\/$/, "");
   const livePath   = "/" + localePath.replace(/^\/|\/$/, "");
   const locale     = lcMatch[1];
-  return [{ masterPath, liveCopies: [{ label: locale.toUpperCase(), path: livePath, maskedPath: "/" + locale }] }];
+  return [{ masterPath, liveCopies: [{ siteName: locale.toUpperCase(), path: livePath, maskedPath: "/" + locale }] }];
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -188,7 +197,6 @@ function appendEnvCard({ key, config, isNew }) {
           class="env-card__name-input"
           value="${_esc(key)}"
           maxlength="32"
-          help-text="Letters, numbers, - _ only"
         ></sp-textfield>
       </div>
       <sp-action-button class="env-card__collapse" quiet type="button" title="Toggle fields" aria-expanded="${ariaExpanded}">
@@ -214,8 +222,7 @@ function appendEnvCard({ key, config, isNew }) {
             class="env-card__author"
             type="url"
             value="${_esc(config.author || "")}"
-            placeholder="https://author.example.com"
-            help-text="No trailing slash"
+            placeholder='e.g. "https://author-[123].adobeaemcloud.com"'
           ></sp-textfield>
         </div>
         <div class="sp-field">
@@ -224,8 +231,7 @@ function appendEnvCard({ key, config, isNew }) {
             class="env-card__publish"
             type="url"
             value="${_esc(config.publish || "")}"
-            placeholder="https://www.example.com"
-            help-text="No trailing slash"
+            placeholder='e.g. "https://www.example.com"'
           ></sp-textfield>
         </div>
       </div>
@@ -239,8 +245,7 @@ function appendEnvCard({ key, config, isNew }) {
   const colorRow = document.createElement("div");
   colorRow.className = "sp-field env-card__color-row";
 
-  const colorLabel = document.createElement("sp-field-label");
-  colorLabel.textContent = "Environment Color";
+  const colorLabel = _makeFieldLabelWithHelp("Environment Color");
   colorRow.appendChild(colorLabel);
 
   const colorPicker = document.createElement("sp-picker");
@@ -383,13 +388,14 @@ function appendLmCard({ masterPath, liveCopies }) {
 
   const pathWrap = document.createElement("div");
   pathWrap.className = "sp-field lm-card__path-wrap";
-  const pathLabel = document.createElement("sp-field-label");
-  pathLabel.textContent = "Language Master Path";
+  const pathLabel = _makeFieldLabelWithHelp(
+    "Language Master Path",
+    "Full JCR path to the source site where edits are made."
+  );
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lm-card__path";
   pathField.setAttribute("value", _esc(masterPath || ""));
   pathField.setAttribute("placeholder", 'e.g. "/content/site/language-masters/[locale]"');
-  pathField.setAttribute("help-text", "Full JCR path — no trailing slash");
   pathWrap.append(pathLabel, pathField);
 
   const collapseBtn = document.createElement("sp-action-button");
@@ -475,8 +481,10 @@ function makeLcRow({ siteName, path, maskedPath }) {
 
   const siteNameWrap = document.createElement("div");
   siteNameWrap.className = "sp-field lc-row__site-name-wrap";
-  const siteNameFieldLabel = document.createElement("sp-field-label");
-  siteNameFieldLabel.textContent = "Site Name";
+  const siteNameFieldLabel = _makeFieldLabelWithHelp(
+    "Site Name",
+    'The Site Name appears in the "Published" instance dropdown.'
+  );
   const siteNameField = document.createElement("sp-textfield");
   siteNameField.className = "lc-row__site-name";
   siteNameField.setAttribute("value", _esc(siteName || ""));
@@ -486,8 +494,10 @@ function makeLcRow({ siteName, path, maskedPath }) {
 
   const pathWrap = document.createElement("div");
   pathWrap.className = "sp-field lc-row__path-wrap";
-  const pathFieldLabel = document.createElement("sp-field-label");
-  pathFieldLabel.textContent = "Live Copy Path";
+  const pathFieldLabel = _makeFieldLabelWithHelp(
+    "Live Copy Path",
+    "Full JCR path to the rolled-out live copy."
+  );
   const pathField = document.createElement("sp-textfield");
   pathField.className = "lc-row__path";
   pathField.setAttribute("value", _esc(path || ""));
@@ -496,13 +506,14 @@ function makeLcRow({ siteName, path, maskedPath }) {
 
   const maskedWrap = document.createElement("div");
   maskedWrap.className = "sp-field lc-row__masked-wrap";
-  const maskedFieldLabel = document.createElement("sp-field-label");
-  maskedFieldLabel.textContent = "Masked Path";
+  const maskedFieldLabel = _makeFieldLabelWithHelp(
+    "Masked Path",
+    "Optional — leave blank to derive from the Live Copy path (e.g. /en-us)"
+  );
   const maskedField = document.createElement("sp-textfield");
   maskedField.className = "lc-row__masked";
   maskedField.setAttribute("value", _esc(maskedPath || ""));
   maskedField.setAttribute("placeholder", 'e.g. "/en-us"');
-  maskedField.setAttribute("help-text", "Leave blank to auto-derive");
   maskedWrap.append(maskedFieldLabel, maskedField);
 
   const removeBtn = document.createElement("sp-action-button");
@@ -591,6 +602,52 @@ function _normPath(p) {
   const clean = (p || "").trim().replace(/\.html$/, "").replace(/\/+$/, "");
   if (!clean) return "";
   return clean.startsWith("/") ? clean : "/" + clean;
+}
+
+function _makeFieldLabelWithHelp(labelText, helpText = "") {
+  const row = document.createElement("div");
+  row.className = "sp-field__label-row";
+
+  const label = document.createElement("sp-field-label");
+  label.textContent = labelText;
+  row.appendChild(label);
+
+  if (helpText) {
+    row.appendChild(_makeHelpTooltip(helpText));
+  }
+
+  return row;
+}
+
+function _makeHelpTooltip(helpText) {
+  const wrap = document.createElement("div");
+  wrap.className = "sp-help-trigger";
+
+  const icon = document.createElement("sp-icon-info");
+  icon.setAttribute("tabindex", "0");
+
+  const overlay = document.createElement("sp-overlay");
+  overlay.setAttribute("placement", "bottom");
+  overlay.setAttribute("type", "hint");
+  overlay.setAttribute("describe-trigger", "none");
+
+  const tooltip = document.createElement("sp-tooltip");
+  tooltip.setAttribute("placement", "bottom");
+  tooltip.textContent = helpText;
+  overlay.appendChild(tooltip);
+
+  overlay.triggerElement = icon;
+
+  const open = () => { overlay.open = true; };
+  const close = () => { overlay.open = false; };
+
+  wrap.addEventListener("mouseenter", open);
+  wrap.addEventListener("mouseleave", close);
+  wrap.addEventListener("focusin", open);
+  wrap.addEventListener("focusout", close);
+
+  wrap.append(icon, overlay);
+  return wrap;
 }
 
 function _cap(s) {
