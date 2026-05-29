@@ -30,14 +30,14 @@ A Chrome (and Firefox) extension for AEM developers and authors to quickly switc
 1. Click the **Settings** (⚙) icon in the popup title bar, or open the Chrome side panel
 2. Under the **Environments** tab, set the Author and Publish base URLs for each environment
 3. Use **Add Environment** to create a custom entry
-4. Click **Save Environments**
+4. Click **Save**
 
 ### Configuring Language Masters & Live Copies
 
 1. Open the side panel and switch to the **Masters & Live Copies** tab
 2. Add a Language Master path (e.g. `/content/site/language-masters/en`)
 3. For each Live Copy, set a label (shown in the Published dropdown), the Live Copy path, and an optional masked path for dispatcher-rewritten URLs
-4. Click **Save Masters & Live Copies**
+4. Click **Save**
 
 ### Export / Import
 

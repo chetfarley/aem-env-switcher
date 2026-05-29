@@ -5,7 +5,19 @@
     "description": "Quickly switch between AEM environments (Author, Publish, Preview).",
     "action": {
       "default_popup": "popup.html",
-      "default_icon": "icon.png"
+      "default_icon": {
+        "16": "icon-light-16.png",
+        "48": "icon-light-48.png",
+        "128": "icon-light-128.png"
+      }
+    },
+    "icons": {
+      "16": "icon-light-16.png",
+      "48": "icon-light-48.png",
+      "128": "icon-light-128.png"
+    },
+    "background": {
+      "service_worker": "background.js"
     },
     "options_page": "sidepanel.html",
     "side_panel": {

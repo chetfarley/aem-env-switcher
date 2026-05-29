@@ -4,6 +4,14 @@
    shadow DOM — we only set structural defaults here.
    ========================================================================== */
 
+/* BG Theme Colors outside sp-theme to style full sidebar panel */
+@media (prefers-color-scheme: dark)  {:root { --gray-75: rgb(38, 38, 38);  }}  
+@media (prefers-color-scheme: light) {:root { --gray-75: rgb(253,253,253); }}
+
+:root {
+  --body-background-color: var(--gray-75);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -13,6 +21,7 @@ body {
                'Segoe UI', Roboto, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: var(--body-background-color);
 }
 
 /*

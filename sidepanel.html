@@ -12,20 +12,32 @@
   <header class="sp-header">
     <sp-icon-settings class="sp-header__icon" aria-hidden="true"></sp-icon-settings>
     <h1 class="sp-header__title">Settings</h1>
+    <sp-action-button id="io-menu-btn" class="sp-header__io-btn" quiet type="button" title="Import/Export Settings">
+      <sp-icon-more-vertical slot="icon"></sp-icon-more-vertical>
+    </sp-action-button>
+    <sp-overlay
+      id="io-overlay"
+      trigger="io-menu-btn@click"
+      placement="bottom-end"
+      type="auto"
+    >
+      <sp-popover id="io-popover" role="menu" aria-label="Import/Export Settings">
+        <sp-menu id="io-menu">
+          <sp-menu-item value="export">
+            <sp-icon-download slot="icon"></sp-icon-download>
+            Export Settings
+          </sp-menu-item>
+          <sp-menu-item value="import">
+            <sp-icon-data-upload slot="icon"></sp-icon-data-upload>
+            Import Settings
+          </sp-menu-item>
+        </sp-menu>
+      </sp-popover>
+    </sp-overlay>
+    <input type="file" id="import-file" accept=".json" style="display:none">
   </header>
 
-  <div class="sp-io-bar">
-    <sp-button id="export-btn" type="button" variant="secondary" size="m">
-      <sp-icon-download slot="icon"></sp-icon-download>
-      Export
-    </sp-button>
-    <sp-button id="import-btn" type="button" variant="secondary" size="m">
-      <sp-icon-data-upload slot="icon"></sp-icon-data-upload>
-      Import
-    </sp-button>
-    <input type="file" id="import-file" accept=".json" style="display:none">
-    <span class="sp-io-status" id="io-status" role="status" aria-live="polite"></span>
-  </div>
+  <div class="sp-toast-overlay" id="io-status" role="status" aria-live="polite"></div>
 
   <sp-tabs id="sp-tabs" selected="envs" aria-label="Settings sections">
     <sp-tab id="tab-envs" label="Environments" value="envs">
@@ -52,12 +64,12 @@
         </sp-button>
       </div>
 
-      <div class="sp-status" id="envs-status" role="status" aria-live="polite"></div>
+      <div class="sp-toast-overlay" id="envs-status" role="status" aria-live="polite"></div>
 
       <div class="sp-actions">
         <sp-button id="save-envs" type="button" variant="accent" size="m">
           <sp-icon-save-floppy slot="icon"></sp-icon-save-floppy>
-          Save Environments
+          Save
         </sp-button>
       </div>
     </sp-tab-panel>
@@ -66,9 +78,7 @@
     <sp-tab-panel id="panel-i18n" value="i18n">
       <p class="sp-hint">
         Map each <strong>Language Master</strong> to one or more
-        <strong>Live Copies</strong>. The Site Name appears in the "Published" instance 
-        dropdown. Masked Path is optional — leave blank to derive it from the last 
-        locale segment of the Live Copy path (e.g. <code>/en-us</code>).
+        <strong>Live Copies</strong>.
       </p>
 
       <div id="lm-list" class="sp-list">
@@ -82,12 +92,12 @@
         </sp-button>
       </div>
 
-      <div class="sp-status" id="i18n-status" role="status" aria-live="polite"></div>
+      <div class="sp-toast-overlay" id="i18n-status" role="status" aria-live="polite"></div>
 
       <div class="sp-actions">
         <sp-button id="save-i18n" type="button" variant="accent" size="m">
           <sp-icon-save-floppy slot="icon"></sp-icon-save-floppy>
-          Save Masters &amp; Live Copies
+          Save
         </sp-button>
       </div>
     </sp-tab-panel>

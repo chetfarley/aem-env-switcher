@@ -11,7 +11,7 @@
 //   PageType      = 'language-master' | 'live-copy' | 'other'
 //
 //   LiveCopy {
-//     label:       string   — display label, e.g. "NA – English (US)"
+//     siteName:    string   — display label, e.g. "NA – English (US)"
 //     path:        string   — full JCR path, e.g. /content/site/na/en-us
 //     maskedPath?: string   — explicit publish-rewrite prefix, e.g. /en-us
 //                             omit to derive automatically from path
@@ -61,6 +61,37 @@ async function loadStorageConfig() {
     i18nMappings: data.i18nMappings || [],
   };
 }
+
+function reportThemeForActionIconSync() {
+  if (typeof window?.matchMedia !== "function") return;
+  if (!chrome?.runtime?.sendMessage) return;
+
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+  const notify = () => {
+    try {
+      const maybePromise = chrome.runtime.sendMessage({
+        type: "theme-sync",
+        isDark: media.matches,
+      });
+      if (maybePromise && typeof maybePromise.catch === "function") {
+        maybePromise.catch(() => {});
+      }
+    } catch {
+      // ignore icon sync errors
+    }
+  };
+
+  notify();
+
+  if (typeof media.addEventListener === "function") {
+    media.addEventListener("change", notify);
+  } else if (typeof media.addListener === "function") {
+    media.addListener(notify);
+  }
+}
+
+reportThemeForActionIconSync();
 
 // ---------------------------------------------------------------------------
 // Path utilities
@@ -394,7 +425,7 @@ function buildActionUrls(envKey, envConfig, ctx, isActiveEnv) {
     // "published" is always a dropdown of all configured live copies
     const publishedOptions = hasPublish
       ? (mapping.liveCopies || [])
-          .map(lc => ({ label: lc.label, url: buildPublishUrl(publish, lc, pagePath) }))
+          .map(lc => ({ label: lc.siteName, url: buildPublishUrl(publish, lc, pagePath) }))
           .filter(o => o.label && o.url)
       : null;
 
@@ -742,7 +773,7 @@ function sortedEnvEntries(envs) {
 
     const typeLabels = {
       "language-master": "Language Master",
-      "live-copy":       `Live Copy${_ctx.liveCopy?.label ? " · " + _ctx.liveCopy.label : ""}`,
+      "live-copy":       `Live Copy${_ctx.liveCopy?.siteName ? " · " + _ctx.liveCopy.siteName : ""}`,  
       "other":           "",
     };
     const instanceLabels = {

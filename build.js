@@ -71,6 +71,7 @@ const esbuildCtx = await esbuild.context({
 // Add any new extension files here as the project grows.
 const CHROME_FILES = [
   "manifest.json",
+  "background.js",
   "popup.html",
   "popup.js",
   "sidepanel.html",
@@ -78,6 +79,16 @@ const CHROME_FILES = [
   "style.css",
   "swc-bundle.js",  // built from src/swc-imports.js by esbuild
   "icon.png",       // skipped silently if absent
+];
+
+// Icon files: sourced from src/img/, flattened to dist/chrome/ root
+const ICON_FILES = [
+  { src: "src/img/icon-light-16.png", dest: "icon-light-16.png" },
+  { src: "src/img/icon-dark-16.png", dest: "icon-dark-16.png" },
+  { src: "src/img/icon-light-48.png", dest: "icon-light-48.png" },
+  { src: "src/img/icon-dark-48.png", dest: "icon-dark-48.png" },
+  { src: "src/img/icon-light-128.png", dest: "icon-light-128.png" },
+  { src: "src/img/icon-dark-128.png", dest: "icon-dark-128.png" },
 ];
 
 async function packageChrome() {
@@ -93,6 +104,13 @@ async function packageChrome() {
     const src = path.join(__dir, file);
     if (!fs.existsSync(src)) continue;
     fs.copyFileSync(src, path.join(distDir, file));
+  }
+
+  // Copy icons from src/img/ (flatten to dist/chrome/ root)
+  for (const icon of ICON_FILES) {
+    const srcPath = path.join(__dir, icon.src);
+    if (!fs.existsSync(srcPath)) continue;
+    fs.copyFileSync(srcPath, path.join(distDir, icon.dest));
   }
 
   // Zip using the system zip command (same approach as build-firefox.sh)

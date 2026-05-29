@@ -26,6 +26,7 @@ import "@spectrum-web-components/menu/sp-menu-divider.js";
 // ── Popover / Overlay ─────────────────────────────────────────────────────────
 import "@spectrum-web-components/popover/sp-popover.js";
 import "@spectrum-web-components/overlay/sp-overlay.js";
+import "@spectrum-web-components/tooltip/sp-tooltip.js";
 
 // ── Forms ─────────────────────────────────────────────────────────────────────
 import "@spectrum-web-components/textfield/sp-textfield.js";
@@ -73,3 +74,4 @@ import "@spectrum-web-components/icons-workflow/icons/sp-icon-data-upload.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-save-floppy.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-servers.js";
 import "@spectrum-web-components/icons-workflow/icons/sp-icon-web-page.js";
+import "@spectrum-web-components/icons-workflow/icons/sp-icon-more-vertical.js";

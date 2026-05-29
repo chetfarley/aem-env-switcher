@@ -28,8 +28,8 @@ body.sidepanel {
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 16px 20px 12px;
-  background: var(--spectrum-gray-200);
+  padding: 10px 12px 10px 20px;
+  background: var(--spectrum-gray-100);
   border-bottom: 1px solid var(--spectrum-gray-300);
 }
 
@@ -39,9 +39,14 @@ body.sidepanel {
 }
 
 .sp-header__title {
-  font-size: 18px;
+  flex: 1;
+  font-size: 15px;
   font-weight: 500;
   margin: 0;
+}
+
+.sp-header__io-btn {
+  flex-shrink: 0;
 }
 
 /* ── Tabs ────────────────────────────────────────────────────────────────── */
@@ -96,25 +101,20 @@ sp-tab-panel[selected] {
   justify-content: flex-start;
 }
 
-/* ── Status toast container ──────────────────────────────────────────────── */
+/* ── Toast overlay (fixed, bottom-center, shared by all status messages) ── */
 
-.sp-status {
-  min-height: 18px;
+.sp-toast-overlay {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-/* ── Import / Export toolbar ─────────────────────────────────────────────── */
-
-.sp-io-bar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-bottom: 1px solid var(--spectrum-gray-300);
-}
-
-.sp-io-status {
-  margin-left: auto;
-  min-height: 18px;
+.sp-toast-overlay sp-toast {
+  pointer-events: auto;
 }
 
 /* ── Actions bar ─────────────────────────────────────────────────────────── */
@@ -122,7 +122,7 @@ sp-tab-panel[selected] {
 .sp-actions {
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 8px;
+  padding-bottom: 20px;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -130,7 +130,7 @@ sp-tab-panel[selected] {
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .env-card {
-  border: 1px solid var(--spectrum-gray-300);
+  border: 1px solid var(--spectrum-gray-100);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -146,27 +146,99 @@ sp-tab-panel[selected] {
   transition: background 0.15s, border-color 0.15s;
 }
 
+/* Color Themes
+/* ------------------ */
+
+/*  Gray  */
 .env-card__header[data-env-color="gray"]       { background: var(--spectrum-gray-300); }
-.env-card__header[data-env-color="red"]        { background: var(--spectrum-red-200); }
-.env-card__header[data-env-color="orange"]     { background: var(--spectrum-orange-200); }
-.env-card__header[data-env-color="yellow"]     { background: var(--spectrum-yellow-200); }
-.env-card__header[data-env-color="chartreuse"] { background: var(--spectrum-chartreuse-200); }
-.env-card__header[data-env-color="celery"]     { background: var(--spectrum-celery-200); }
-.env-card__header[data-env-color="green"]      { background: var(--spectrum-green-200); }
-.env-card__header[data-env-color="seafoam"]    { background: var(--spectrum-seafoam-200); }
-.env-card__header[data-env-color="blue"]       { background: var(--spectrum-blue-200); }
-.env-card__header[data-env-color="indigo"]     { background: var(--spectrum-indigo-200); }
-.env-card__header[data-env-color="purple"]     { background: var(--spectrum-purple-200); }
-.env-card__header[data-env-color="fuchsia"]    { background: var(--spectrum-fuchsia-200); }
-.env-card__header[data-env-color="magenta"]    { background: var(--spectrum-magenta-200); }
-
-.env-card__name-wrap {
-  flex: 1;
-  min-width: 0;
+.env-card__header[data-env-color="gray"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-gray-200);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-gray-300);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-gray-200);
 }
-
-.env-card__name-input {
-  width: 100%;
+/*  Red  */
+.env-card__header[data-env-color="red"]        { background: var(--spectrum-red-200); }
+.env-card__header[data-env-color="red"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-red-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-red-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-red-300);
+}
+/*  Orange  */
+.env-card__header[data-env-color="orange"]     { background: var(--spectrum-orange-200); }
+.env-card__header[data-env-color="orange"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-orange-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-orange-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-orange-300);
+}
+/*  Yellow  */
+.env-card__header[data-env-color="yellow"]     { background: var(--spectrum-yellow-200); }
+.env-card__header[data-env-color="yellow"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-yellow-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-yellow-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-yellow-300);
+}
+/*  Chartreuse  */
+.env-card__header[data-env-color="chartreuse"] { background: var(--spectrum-chartreuse-200); }
+.env-card__header[data-env-color="chartreuse"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-chartreuse-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-chartreuse-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-chartreuse-300);
+}
+/*  Celery  */
+.env-card__header[data-env-color="celery"]     { background: var(--spectrum-celery-200); }
+.env-card__header[data-env-color="celery"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-celery-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-celery-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-celery-300);
+}
+/*  Green  */
+.env-card__header[data-env-color="green"]      { background: var(--spectrum-green-200); }
+.env-card__header[data-env-color="green"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-green-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-green-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-green-300);
+}
+/*  Seafoam  */
+.env-card__header[data-env-color="seafoam"]    { background: var(--spectrum-seafoam-200); }
+.env-card__header[data-env-color="seafoam"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-seafoam-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-seafoam-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-seafoam-300);
+}
+/*  Blue  */
+.env-card__header[data-env-color="blue"]       { background: var(--spectrum-blue-200); }
+.env-card__header[data-env-color="blue"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-blue-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-blue-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-blue-300);
+}
+/* Indigo */
+.env-card__header[data-env-color="indigo"]     { background: var(--spectrum-indigo-200); }
+.env-card__header[data-env-color="indigo"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-indigo-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-indigo-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-indigo-300);
+}
+/*  Purple  */
+.env-card__header[data-env-color="purple"]     { background: var(--spectrum-purple-200); }
+.env-card__header[data-env-color="purple"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-purple-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-purple-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-purple-300);
+}
+/*  Fuchsia  */
+.env-card__header[data-env-color="fuchsia"]    { background: var(--spectrum-fuchsia-200); }
+.env-card__header[data-env-color="fuchsia"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-fuchsia-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-fuchsia-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-fuchsia-300);
+}
+/*  Magenta  */
+.env-card__header[data-env-color="magenta"]    { background: var(--spectrum-magenta-200); }
+.env-card__header[data-env-color="magenta"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-magenta-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-magenta-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-magenta-300);
 }
 
 .env-card__collapse {
@@ -218,8 +290,54 @@ sp-tab-panel[selected] {
   gap: 4px;
 }
 
+.sp-field__label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sp-help-trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sp-help-trigger sp-icon-info {
+  width: 12px;
+  height: 12px;
+  color: var(--spectrum-gray-600);
+  cursor: help;
+}
+
+.sp-help-trigger sp-icon-info:hover {
+  color: var(--spectrum-gray-800);
+}
+
 .sp-field sp-textfield {
   width: 100%;
+}
+
+/* Environment Name field [quiet] */
+.env-card__name-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.env-card__name-input {
+  width: 100%;
+  --mod-textfield-font-weight: var(--spectrum-bold-font-weight);
+}
+@media (prefers-color-scheme: dark) {
+  .env-card__name-input {
+    --mod-textfield-border-color: var(--spectrum-transparent-white-300);
+    --mod-textfield-text-color-default: var(--spectrum-transparent-white-800);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .env-card__name-input {
+    --mod-textfield-border-color: var(--spectrum-transparent-black-300);
+    --mod-textfield-text-color-default: var(--spectrum-transparent-black-800);
+  }
 }
 
 .env-card__fields {

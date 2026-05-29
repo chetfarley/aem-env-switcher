@@ -19,11 +19,19 @@ mkdir -p "$DIST"
 
 echo "Copying shared files..."
 cp "$ROOT/style.css"      "$DIST/"
+cp "$ROOT/background.js"  "$DIST/"
 cp "$ROOT/popup.js"       "$DIST/"
 # Bundled JS (built by: npm run build)
 cp "$ROOT/swc-bundle.js"  "$DIST/"
 cp "$ROOT/sidepanel.js"   "$DIST/"
-# Copy icon if it exists
+
+# Copy icons from src/img/ (flatten to dist root)
+[ -f "$ROOT/src/img/icon-light-16.png" ] && cp "$ROOT/src/img/icon-light-16.png" "$DIST/icon-light-16.png"
+[ -f "$ROOT/src/img/icon-dark-16.png" ] && cp "$ROOT/src/img/icon-dark-16.png" "$DIST/icon-dark-16.png"
+[ -f "$ROOT/src/img/icon-light-48.png" ] && cp "$ROOT/src/img/icon-light-48.png" "$DIST/icon-light-48.png"
+[ -f "$ROOT/src/img/icon-dark-48.png" ] && cp "$ROOT/src/img/icon-dark-48.png" "$DIST/icon-dark-48.png"
+[ -f "$ROOT/src/img/icon-light-128.png" ] && cp "$ROOT/src/img/icon-light-128.png" "$DIST/icon-light-128.png"
+[ -f "$ROOT/src/img/icon-dark-128.png" ] && cp "$ROOT/src/img/icon-dark-128.png" "$DIST/icon-dark-128.png"
 [ -f "$ROOT/icon.png" ] && cp "$ROOT/icon.png" "$DIST/"
 
 echo "Copying Firefox-specific files..."
@@ -34,11 +42,21 @@ echo "Generating HTML files (injecting browser-compat.js shim into root HTML fil
 
 # Inject <script src="browser-compat.js"></script> before the first <script> tag
 # so the shim remaps `chrome` before any extension JS runs.
-sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
-  "$ROOT/popup.html" > "$DIST/popup.html"
+awk '
+  !done && /<script/ {
+    print "  <script src=\"browser-compat.js\"><\/script>";
+    done = 1
+  }
+  { print }
+' "$ROOT/popup.html" > "$DIST/popup.html"
 
-sed 's|<script src="|<script src="browser-compat.js"></script>\n  <script src="|' \
-  "$ROOT/sidepanel.html" > "$DIST/sidepanel.html"
+awk '
+  !done && /<script/ {
+    print "  <script src=\"browser-compat.js\"><\/script>";
+    done = 1
+  }
+  { print }
+' "$ROOT/sidepanel.html" > "$DIST/sidepanel.html"
 
 echo "Creating zip archive..."
 ZIP="$ROOT/dist/aem-env-switcher-firefox.zip"
