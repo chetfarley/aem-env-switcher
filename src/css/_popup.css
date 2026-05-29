@@ -1,0 +1,178 @@
+/* ==========================================================================
+   _popup.css
+   Layout for the extension popup: titlebar + instance cards + context bar.
+   All colors via Spectrum tokens provided by <sp-theme>.
+   ========================================================================== */
+
+/* ── Popup body ───────────────────────────────────────────────────────────── */
+
+body.popup {
+  width: 480px;
+  overflow: visible; /* allow sp-overlay to render outside body bounds */
+}
+
+/* ── Title bar ────────────────────────────────────────────────────────────── */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px 6px 12px;
+  background: var(--spectrum-gray-300);
+  height: 40px;
+  border-bottom: 1px solid var(--spectrum-gray-400);
+}
+
+.titlebar__env {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.titlebar__env sp-picker {
+  width: 33%;
+}
+
+.titlebar__divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--spectrum-gray-400);
+  flex-shrink: 0;
+  margin-block: 6px;
+}
+
+.titlebar__meta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Instance card grid ───────────────────────────────────────────────────── */
+
+.instance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* .published-anchor is a grid item — make it transparent to layout */
+.published-anchor {
+  display: contents;
+}
+
+.instance-card {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 32px 12px 30px;
+  background: var(--spectrum-gray-75);
+  border-right: 1px solid var(--spectrum-gray-300);
+  border-bottom: 3px solid transparent; /* reserve space for active indicator */
+  transition: background 0.12s, border-bottom-color 0.12s;
+  position: relative;
+  text-align: center;
+}
+
+.published-anchor:last-child .instance-card {
+  border-right: none;
+}
+
+.instance-card:hover:not(:disabled) {
+  background: var(--spectrum-gray-100);
+}
+
+.instance-card:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Active: currently viewing this instance in the selected env */
+.instance-card.is-active {
+  background: var(--instance-card-background--active);
+  border-bottom-color: var(--instance-card-border--active);
+  opacity: 1; /* override disabled state if both active and unavailable */
+}
+
+.instance-card__icon {
+  width: 28px;
+  height: 28px;
+  color: var(--spectrum-gray-600);
+}
+
+.instance-card.is-active .instance-card__icon {
+  color: var(--instance-card-icon--active);
+}
+
+.instance-card__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--spectrum-gray-700);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+}
+
+.instance-card.is-active .instance-card__label {
+  color: var(--instance-card-text--active);
+}
+
+/* Chevron — shown only when .published-anchor has .has-dropdown */
+.instance-card__chevron {
+  display: none;
+  /* position: absolute; */
+  /* bottom: 5px; */
+  margin-inline-start: 2px;
+  width: 12px;
+  height: 12px;
+  color: var(--spectrum-gray-500);
+}
+
+.published-anchor.has-dropdown .instance-card__chevron {
+  display: block;
+}
+
+/* ── Context bar ──────────────────────────────────────────────────────────── */
+
+.context-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 6px;
+  background: var(--spectrum-gray-100);
+  font-size: 11px;
+  color: var(--spectrum-gray-700);
+  min-height: 22px;
+  border-top: 1px solid var(--spectrum-gray-300);
+  overflow: hidden;
+}
+
+.context-bar__type {
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--spectrum-gray-700);
+  flex-shrink: 0;
+}
+
+/* Separator dot shown only when both type and URL have content */
+.context-bar__type:not(:empty) + .context-bar__url:not(:empty)::before {
+  content: "·";
+  margin-right: 6px;
+  opacity: 0.5;
+}
+
+.context-bar__url {
+  flex: 1 1 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 0.65;
+  min-width: 0;
+}

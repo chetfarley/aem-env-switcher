@@ -1,0 +1,22 @@
+/* ==========================================================================
+   _tokens.css
+   Spectrum Web Components is themed via <sp-theme> in HTML.
+   This file contains ONLY non-color layout tokens used across our own CSS.
+   No --md-sys-color-*, --md-ref-typeface-*, or --md-filled-* tokens.
+   ========================================================================== */
+
+:root {
+  /* ── Instance card active state (overridden per env color on <body>) ─── */
+  --instance-card-background--active: var(--spectrum-blue-100);
+  --instance-card-border--active:     var(--spectrum-blue-700);
+  --instance-card-icon--active:       var(--spectrum-blue-800);
+  --instance-card-text--active:       var(--spectrum-blue-900);
+
+  /* ── Spacing scale ───────────────────────────────────────────────────── */
+  --spacing-xs:  4px;
+  --spacing-sm:  8px;
+  --spacing-md:  12px;
+  --spacing-lg:  16px;
+  --spacing-xl:  20px;
+  --spacing-2xl: 32px;
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AEM Env Switcher — Settings</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="swc-bundle.js"></script>
+</head>
+<body class="sidepanel">
+<sp-theme id="sp-theme" scale="medium" color="light">
+
+  <header class="sp-header">
+    <sp-icon-settings class="sp-header__icon" aria-hidden="true"></sp-icon-settings>
+    <h1 class="sp-header__title">Settings</h1>
+    <sp-action-button id="io-menu-btn" class="sp-header__io-btn" quiet type="button" title="Import/Export Settings">
+      <sp-icon-more-vertical slot="icon"></sp-icon-more-vertical>
+    </sp-action-button>
+    <sp-overlay
+      id="io-overlay"
+      trigger="io-menu-btn@click"
+      placement="bottom-end"
+      type="auto"
+    >
+      <sp-popover id="io-popover" role="menu" aria-label="Import/Export Settings">
+        <sp-menu id="io-menu">
+          <sp-menu-item value="export">
+            <sp-icon-download slot="icon"></sp-icon-download>
+            Export Settings
+          </sp-menu-item>
+          <sp-menu-item value="import">
+            <sp-icon-data-upload slot="icon"></sp-icon-data-upload>
+            Import Settings
+          </sp-menu-item>
+        </sp-menu>
+      </sp-popover>
+    </sp-overlay>
+    <input type="file" id="import-file" accept=".json" style="display:none">
+  </header>
+
+  <div class="sp-toast-overlay" id="io-status" role="status" aria-live="polite"></div>
+
+  <sp-tabs id="sp-tabs" selected="envs" aria-label="Settings sections">
+    <sp-tab id="tab-envs" label="Environments" value="envs">
+      <sp-icon-servers slot="icon"></sp-icon-servers>
+    </sp-tab>
+    <sp-tab id="tab-i18n" label="Masters &amp; Live Copies" value="i18n">
+      <sp-icon-globe slot="icon"></sp-icon-globe>
+    </sp-tab>
+
+    <!-- ── Environments panel ────────────────────────────────────────────── -->
+    <sp-tab-panel id="panel-envs" value="envs">
+      <p class="sp-hint">
+        Configure the Author and Publish base URLs for each environment.
+      </p>
+
+      <div id="env-list" class="sp-list">
+        <!-- Populated by sidepanel.js -->
+      </div>
+
+      <div class="sp-add-row">
+        <sp-button id="add-env-btn" type="button" variant="secondary" size="m">
+          <sp-icon-add slot="icon"></sp-icon-add>
+          Add Environment
+        </sp-button>
+      </div>
+
+      <div class="sp-toast-overlay" id="envs-status" role="status" aria-live="polite"></div>
+
+      <div class="sp-actions">
+        <sp-button id="save-envs" type="button" variant="accent" size="m">
+          <sp-icon-save-floppy slot="icon"></sp-icon-save-floppy>
+          Save
+        </sp-button>
+      </div>
+    </sp-tab-panel>
+
+    <!-- ── Masters & Live Copies panel ──────────────────────────────────── -->
+    <sp-tab-panel id="panel-i18n" value="i18n">
+      <p class="sp-hint">
+        Map each <strong>Language Master</strong> to one or more
+        <strong>Live Copies</strong>.
+      </p>
+
+      <div id="lm-list" class="sp-list">
+        <!-- Populated by sidepanel.js -->
+      </div>
+
+      <div class="sp-add-row">
+        <sp-button id="add-lm-btn" type="button" variant="secondary" size="m">
+          <sp-icon-add slot="icon"></sp-icon-add>
+          Add Language Master
+        </sp-button>
+      </div>
+
+      <div class="sp-toast-overlay" id="i18n-status" role="status" aria-live="polite"></div>
+
+      <div class="sp-actions">
+        <sp-button id="save-i18n" type="button" variant="accent" size="m">
+          <sp-icon-save-floppy slot="icon"></sp-icon-save-floppy>
+          Save
+        </sp-button>
+      </div>
+    </sp-tab-panel>
+  </sp-tabs>
+
+  <script type="module" src="sidepanel.js"></script>
+
+</sp-theme>
+</body>
+</html>

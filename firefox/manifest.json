@@ -1,0 +1,52 @@
+{
+  "manifest_version": 2,
+  "name": "AEM Environment Switcher",
+  "version": "2.0.0",
+  "description": "Quickly switch between AEM environments (Author, Publish, Preview).",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "aem-env-switcher@extension",
+      "strict_min_version": "109.0"
+    }
+  },
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon-light-16.png",
+      "48": "icon-light-48.png",
+      "128": "icon-light-128.png"
+    },
+    "theme_icons": [
+      {
+        "light": "icon-dark-16.png",
+        "dark": "icon-light-16.png",
+        "size": 16
+      },
+      {
+        "light": "icon-dark-48.png",
+        "dark": "icon-light-48.png",
+        "size": 48
+      },
+      {
+        "light": "icon-dark-128.png",
+        "dark": "icon-light-128.png",
+        "size": 128
+      }
+    ]
+  },
+  "icons": {
+    "16": "icon-light-16.png",
+    "48": "icon-light-48.png",
+    "128": "icon-light-128.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "options_page": "sidepanel.html",
+  "sidebar_action": {
+    "default_panel": "sidepanel.html",
+    "default_title": "AEM Env Switcher Settings"
+  },
+  "permissions": ["tabs", "storage"],
+  "content_security_policy": "script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'self'"
+}

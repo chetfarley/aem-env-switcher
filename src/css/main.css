@@ -1,0 +1,13 @@
+/* ==========================================================================
+   main.css — PostCSS entry point
+   Import order matters: tokens first (custom properties must be declared
+   before they are referenced), then reset, then components.
+   postcss-import resolves these at build time into a single style.css output.
+   ========================================================================== */
+
+@import "./_tokens.css";
+@import "./_reset.css";
+@import "./_popup.css";
+@import "./_swc-overrides.css";
+@import "./_env-colors.css";
+@import "./_sidepanel.css";

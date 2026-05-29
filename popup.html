@@ -1,20 +1,84 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>AEM Env Switcher</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="swc-bundle.js"></script>
 </head>
 <body class="popup">
-  <h2>AEM Environment Switcher</h2>
+<sp-theme id="sp-theme" scale="medium" color="light">
 
-  <div id="currentUrl" class="small"></div>
+  <!-- ── Title bar ─────────────────────────────────────────────────────── -->
+  <div class="titlebar" role="toolbar" aria-label="AEM Environment Switcher">
 
-  <div id="envLinks"></div>
+    <div class="titlebar__env">
+      <sp-picker id="envSelect" label="Environment" size="s">
+        <!-- Populated dynamically by popup.js -->
+      </sp-picker>
+    </div>
 
-  <div class="buttons gap-1">
-    <button id="openOptions">&#9881; Settings</button>
+    <div class="titlebar__divider" aria-hidden="true"></div>
+
+    <div class="titlebar__meta">
+      <sp-action-button id="btn-menu" quiet size="s" title="Settings">
+        <sp-icon-settings slot="icon"></sp-icon-settings>
+      </sp-action-button>
+      <sp-action-button id="btn-close" quiet size="s" title="Close">
+        <sp-icon-close slot="icon"></sp-icon-close>
+      </sp-action-button>
+    </div>
+
   </div>
 
-  <script src="popup.js"></script>
+  <!-- ── Instance cards ────────────────────────────────────────────────── -->
+  <div class="instance-grid" role="group" aria-label="View instance">
+
+    <button id="btn-editor" class="instance-card" type="button">
+      <sp-icon-edit class="instance-card__icon" aria-hidden="true"></sp-icon-edit>
+      <span class="instance-card__label">Editor</span>
+    </button>
+
+    <button id="btn-preview" class="instance-card" type="button">
+      <sp-icon-preview class="instance-card__icon" aria-hidden="true"></sp-icon-preview>
+      <span class="instance-card__label">Preview</span>
+    </button>
+
+    <!-- Published: direct link OR dropdown for language-master pages -->
+    <div class="published-anchor">
+      <button id="btn-published" class="instance-card" type="button"
+        aria-haspopup="menu" aria-expanded="false">
+        <sp-icon-publish-check class="instance-card__icon" aria-hidden="true"></sp-icon-publish-check>
+        <span class="instance-card__label">Published <sp-icon-chevron-down class="instance-card__chevron" aria-hidden="true"></sp-icon-chevron-down></span>
+      </button>
+      <sp-overlay
+        id="published-overlay"
+        trigger="btn-published@click"
+        placement="left"
+        type="auto"
+      >
+        <sp-popover
+          id="published-menu"
+          role="menu"
+          aria-label="Published live copies"
+        >
+          <sp-menu>
+            <!-- Populated dynamically for language-master pages -->
+          </sp-menu>
+        </sp-popover>
+      </sp-overlay>
+    </div>
+
+  </div>
+
+  <!-- ── Context bar ─────────────────────────────────────────────────────── -->
+  <div class="context-bar" id="contextBar" aria-live="polite">
+    <span class="context-bar__type" id="contextLabel"></span>
+    <span class="context-bar__url" id="currentUrl"></span>
+  </div>
+
+  <script src="popup.js" defer></script>
+
+</sp-theme>
 </body>
 </html>

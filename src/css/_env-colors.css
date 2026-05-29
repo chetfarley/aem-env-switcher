@@ -1,0 +1,317 @@
+/* ==========================================================================
+   _env-colors.css
+   Per-hue theming via sp-theme[data-env-color="<hue>"].
+
+   Tokens must be declared on <sp-theme> (not <body>) because --spectrum-*
+   palette tokens are only available within sp-theme's cascade — body is
+   sp-theme's parent and cannot resolve them.
+
+   All themed children inherit from this single declaration:
+     - #envSelect sp-picker trigger (via --mod-picker-* tokens)
+     - .instance-card active state (via --instance-card-* tokens)
+
+   Token palette levels used:
+     background : -200   (light tint)
+     text       : -1200   (dark, high contrast on the tint)
+     border     : -400 (default/open) | -600 (hover)
+   ========================================================================== */
+
+sp-theme[data-env-color="gray"] {
+  --mod-picker-background-color-default:      var(--spectrum-gray-200);
+  --mod-picker-font-color-default:            var(--spectrum-gray-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-gray-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-gray-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-gray-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-gray-900);
+  --mod-picker-border-color-default:          var(--spectrum-gray-400);
+  --mod-picker-background-color-hover:        var(--spectrum-gray-200);
+  --mod-picker-font-color-hover:              var(--spectrum-gray-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-gray-600);
+  --mod-picker-background-color-default-open: var(--spectrum-gray-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-gray-1200);
+  --mod-picker-border-default-open:           var(--spectrum-gray-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-gray-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-gray-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-gray-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-gray-100);
+  --instance-card-border--active:             var(--spectrum-gray-700);
+  --instance-card-text--active:               var(--spectrum-gray-900);
+  --instance-card-icon--active:               var(--spectrum-gray-800);
+}
+sp-theme[data-env-color="red"] {
+  --mod-picker-background-color-default:      var(--spectrum-red-200);
+  --mod-picker-font-color-default:            var(--spectrum-red-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-red-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-red-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-red-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-red-900);
+  --mod-picker-border-color-default:          var(--spectrum-red-400);
+  --mod-picker-background-color-hover:        var(--spectrum-red-200);
+  --mod-picker-font-color-hover:              var(--spectrum-red-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-red-600);
+  --mod-picker-background-color-default-open: var(--spectrum-red-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-red-1200);
+  --mod-picker-border-default-open:           var(--spectrum-red-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-red-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-red-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-red-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-red-100);
+  --instance-card-border--active:             var(--spectrum-red-700);
+  --instance-card-text--active:               var(--spectrum-red-900);
+  --instance-card-icon--active:               var(--spectrum-red-800);
+}
+sp-theme[data-env-color="orange"] {
+  --mod-picker-background-color-default:      var(--spectrum-orange-200);
+  --mod-picker-font-color-default:            var(--spectrum-orange-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-orange-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-orange-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-orange-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-orange-900);
+  --mod-picker-border-color-default:          var(--spectrum-orange-400);
+  --mod-picker-background-color-hover:        var(--spectrum-orange-200);
+  --mod-picker-font-color-hover:              var(--spectrum-orange-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-orange-600);
+  --mod-picker-background-color-default-open: var(--spectrum-orange-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-orange-1200);
+  --mod-picker-border-default-open:           var(--spectrum-orange-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-orange-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-orange-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-orange-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-orange-100);
+  --instance-card-border--active:             var(--spectrum-orange-700);
+  --instance-card-text--active:               var(--spectrum-orange-900);
+  --instance-card-icon--active:               var(--spectrum-orange-800);
+}
+sp-theme[data-env-color="yellow"] {
+  --mod-picker-background-color-default:      var(--spectrum-yellow-200);
+  --mod-picker-font-color-default:            var(--spectrum-yellow-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-yellow-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-yellow-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-yellow-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-yellow-900);
+  --mod-picker-border-color-default:          var(--spectrum-yellow-400);
+  --mod-picker-background-color-hover:        var(--spectrum-yellow-200);
+  --mod-picker-font-color-hover:              var(--spectrum-yellow-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-yellow-600);
+  --mod-picker-background-color-default-open: var(--spectrum-yellow-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-yellow-1200);
+  --mod-picker-border-default-open:           var(--spectrum-yellow-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-yellow-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-yellow-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-yellow-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-yellow-100);
+  --instance-card-border--active:             var(--spectrum-yellow-700);
+  --instance-card-text--active:               var(--spectrum-yellow-900);
+  --instance-card-icon--active:               var(--spectrum-yellow-800);
+}
+sp-theme[data-env-color="chartreuse"] {
+  --mod-picker-background-color-default:      var(--spectrum-chartreuse-200);
+  --mod-picker-font-color-default:            var(--spectrum-chartreuse-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-chartreuse-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-chartreuse-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-chartreuse-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-chartreuse-900);
+  --mod-picker-border-color-default:          var(--spectrum-chartreuse-400);
+  --mod-picker-background-color-hover:        var(--spectrum-chartreuse-200);
+  --mod-picker-font-color-hover:              var(--spectrum-chartreuse-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-chartreuse-600);
+  --mod-picker-background-color-default-open: var(--spectrum-chartreuse-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-chartreuse-1200);
+  --mod-picker-border-default-open:           var(--spectrum-chartreuse-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-chartreuse-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-chartreuse-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-chartreuse-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-chartreuse-100);
+  --instance-card-border--active:             var(--spectrum-chartreuse-700);
+  --instance-card-text--active:               var(--spectrum-chartreuse-900);
+  --instance-card-icon--active:               var(--spectrum-chartreuse-800);
+}
+sp-theme[data-env-color="celery"] {
+  --mod-picker-background-color-default:      var(--spectrum-celery-200);
+  --mod-picker-font-color-default:            var(--spectrum-celery-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-celery-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-celery-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-celery-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-celery-900);
+  --mod-picker-border-color-default:          var(--spectrum-celery-400);
+  --mod-picker-background-color-hover:        var(--spectrum-celery-200);
+  --mod-picker-font-color-hover:              var(--spectrum-celery-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-celery-600);
+  --mod-picker-background-color-default-open: var(--spectrum-celery-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-celery-1200);
+  --mod-picker-border-default-open:           var(--spectrum-celery-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-celery-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-celery-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-celery-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-celery-100);
+  --instance-card-border--active:             var(--spectrum-celery-700);
+  --instance-card-text--active:               var(--spectrum-celery-900);
+  --instance-card-icon--active:               var(--spectrum-celery-800);
+}
+sp-theme[data-env-color="green"] {
+  --mod-picker-background-color-default:      var(--spectrum-green-200);
+  --mod-picker-font-color-default:            var(--spectrum-green-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-green-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-green-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-green-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-green-900);
+  --mod-picker-border-color-default:          var(--spectrum-green-400);
+  --mod-picker-background-color-hover:        var(--spectrum-green-200);
+  --mod-picker-font-color-hover:              var(--spectrum-green-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-green-600);
+  --mod-picker-background-color-default-open: var(--spectrum-green-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-green-1200);
+  --mod-picker-border-default-open:           var(--spectrum-green-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-green-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-green-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-green-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-green-100);
+  --instance-card-border--active:             var(--spectrum-green-700);
+  --instance-card-text--active:               var(--spectrum-green-900);
+  --instance-card-icon--active:               var(--spectrum-green-800);
+}
+sp-theme[data-env-color="seafoam"] {
+  --mod-picker-background-color-default:      var(--spectrum-seafoam-200);
+  --mod-picker-font-color-default:            var(--spectrum-seafoam-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-seafoam-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-seafoam-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-seafoam-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-seafoam-900);
+  --mod-picker-border-color-default:          var(--spectrum-seafoam-400);
+  --mod-picker-background-color-hover:        var(--spectrum-seafoam-200);
+  --mod-picker-font-color-hover:              var(--spectrum-seafoam-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-seafoam-600);
+  --mod-picker-background-color-default-open: var(--spectrum-seafoam-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-seafoam-1200);
+  --mod-picker-border-default-open:           var(--spectrum-seafoam-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-seafoam-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-seafoam-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-seafoam-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-seafoam-100);
+  --instance-card-border--active:             var(--spectrum-seafoam-700);
+  --instance-card-text--active:               var(--spectrum-seafoam-900);
+  --instance-card-icon--active:               var(--spectrum-seafoam-800);
+}
+sp-theme[data-env-color="blue"] {
+  --mod-picker-background-color-default:      var(--spectrum-blue-200);
+  --mod-picker-font-color-default:            var(--spectrum-blue-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-blue-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-blue-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-blue-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-blue-900);
+  --mod-picker-border-color-default:          var(--spectrum-blue-400);
+  --mod-picker-background-color-hover:        var(--spectrum-blue-200);
+  --mod-picker-font-color-hover:              var(--spectrum-blue-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-blue-600);
+  --mod-picker-background-color-default-open: var(--spectrum-blue-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-blue-1200);
+  --mod-picker-border-default-open:           var(--spectrum-blue-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-blue-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-blue-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-blue-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-blue-100);
+  --instance-card-border--active:             var(--spectrum-blue-700);
+  --instance-card-text--active:               var(--spectrum-blue-900);
+  --instance-card-icon--active:               var(--spectrum-blue-800);
+}
+sp-theme[data-env-color="indigo"] {
+  --mod-picker-background-color-default:      var(--spectrum-indigo-200);
+  --mod-picker-font-color-default:            var(--spectrum-indigo-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-indigo-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-indigo-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-indigo-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-indigo-900);
+  --mod-picker-border-color-default:          var(--spectrum-indigo-400);
+  --mod-picker-background-color-hover:        var(--spectrum-indigo-200);
+  --mod-picker-font-color-hover:              var(--spectrum-indigo-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-indigo-600);
+  --mod-picker-background-color-default-open: var(--spectrum-indigo-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-indigo-1200);
+  --mod-picker-border-default-open:           var(--spectrum-indigo-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-indigo-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-indigo-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-indigo-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-indigo-100);
+  --instance-card-border--active:             var(--spectrum-indigo-700);
+  --instance-card-text--active:               var(--spectrum-indigo-900);
+  --instance-card-icon--active:               var(--spectrum-indigo-800);
+}
+sp-theme[data-env-color="purple"] {
+  --mod-picker-background-color-default:      var(--spectrum-purple-200);
+  --mod-picker-font-color-default:            var(--spectrum-purple-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-purple-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-purple-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-purple-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-purple-900);
+  --mod-picker-border-color-default:          var(--spectrum-purple-400);
+  --mod-picker-background-color-hover:        var(--spectrum-purple-200);
+  --mod-picker-font-color-hover:              var(--spectrum-purple-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-purple-600);
+  --mod-picker-background-color-default-open: var(--spectrum-purple-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-purple-1200);
+  --mod-picker-border-default-open:           var(--spectrum-purple-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-purple-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-purple-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-purple-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-purple-100);
+  --instance-card-border--active:             var(--spectrum-purple-700);
+  --instance-card-text--active:               var(--spectrum-purple-900);
+  --instance-card-icon--active:               var(--spectrum-purple-800);
+}
+sp-theme[data-env-color="fuchsia"] {
+  --mod-picker-background-color-default:      var(--spectrum-fuchsia-200);
+  --mod-picker-font-color-default:            var(--spectrum-fuchsia-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-fuchsia-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-fuchsia-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-fuchsia-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-fuchsia-900);
+  --mod-picker-border-color-default:          var(--spectrum-fuchsia-400);
+  --mod-picker-background-color-hover:        var(--spectrum-fuchsia-200);
+  --mod-picker-font-color-hover:              var(--spectrum-fuchsia-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-fuchsia-600);
+  --mod-picker-background-color-default-open: var(--spectrum-fuchsia-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-fuchsia-1200);
+  --mod-picker-border-default-open:           var(--spectrum-fuchsia-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-fuchsia-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-fuchsia-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-fuchsia-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-fuchsia-100);
+  --instance-card-border--active:             var(--spectrum-fuchsia-700);
+  --instance-card-text--active:               var(--spectrum-fuchsia-900);
+  --instance-card-icon--active:               var(--spectrum-fuchsia-800);
+}
+sp-theme[data-env-color="magenta"] {
+  --mod-picker-background-color-default:      var(--spectrum-magenta-200);
+  --mod-picker-font-color-default:            var(--spectrum-magenta-1200);
+  --mod-picker-icon-color-default:            var(--spectrum-magenta-800);
+  --mod-picker-icon-color-default-open:       var(--spectrum-magenta-800);
+  --mod-picker-icon-color-hover:              var(--spectrum-magenta-900);
+  --mod-picker-icon-color-hover-open:         var(--spectrum-magenta-900);
+  --mod-picker-border-color-default:          var(--spectrum-magenta-400);
+  --mod-picker-background-color-hover:        var(--spectrum-magenta-200);
+  --mod-picker-font-color-hover:              var(--spectrum-magenta-1200);
+  --mod-picker-border-color-hover:            var(--spectrum-magenta-600);
+  --mod-picker-background-color-default-open: var(--spectrum-magenta-200);
+  --mod-picker-font-color-default-open:       var(--spectrum-magenta-1200);
+  --mod-picker-border-default-open:           var(--spectrum-magenta-400);
+  --mod-picker-background-color-hover-open:   var(--spectrum-magenta-200);
+  --mod-picker-font-color-hover-open:         var(--spectrum-magenta-1200);
+  --mod-picker-border-color-hover-open:       var(--spectrum-magenta-600);
+  /* Active Instance */
+  --instance-card-background--active:         var(--spectrum-magenta-100);
+  --instance-card-border--active:             var(--spectrum-magenta-700);
+  --instance-card-text--active:               var(--spectrum-magenta-900);
+  --instance-card-icon--active:               var(--spectrum-magenta-800);
+}

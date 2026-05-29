@@ -1,0 +1,452 @@
+/* ==========================================================================
+   _sidepanel.css
+   Styles for the settings side panel (sidepanel.html).
+   All colors via Spectrum tokens provided by <sp-theme>.
+   ========================================================================== */
+
+/* ── Body ────────────────────────────────────────────────────────────────── */
+
+body.sidepanel {
+  width: 100%;
+  min-width: 280px;
+  overflow-y: auto;
+  padding-bottom: 32px;
+  /* background: var(--spectrum-gray-75); TODO - get this to work. Seems spectrum var isn't defined outside <sp-theme> */
+}
+
+/* When opened as a full options tab, cap content width for readability. */
+@media (min-width: 600px) {
+  body.sidepanel {
+    max-width: 720px;
+    margin-inline: auto;
+  }
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.sp-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px 10px 20px;
+  background: var(--spectrum-gray-100);
+  border-bottom: 1px solid var(--spectrum-gray-300);
+}
+
+.sp-header__icon {
+  color: var(--spectrum-accent-color-800);
+  font-size: 22px;
+}
+
+.sp-header__title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.sp-header__io-btn {
+  flex-shrink: 0;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+
+sp-tabs {
+  width: 100%;
+}
+
+/* Indent only the tab buttons to align with panel content.
+   ::part(tablist) targets the shadow-DOM tab row, so the full-width
+   bottom border on sp-tabs itself and the panel content are unaffected. */
+sp-tabs::part(tablist) {
+  padding-inline-start: 20px;
+}
+
+sp-tab-panel[selected] {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 20px 0;
+}
+
+/* ── Hint text ───────────────────────────────────────────────────────────── */
+
+.sp-hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--spectrum-gray-700);
+  line-height: 1.6;
+}
+
+.sp-hint code {
+  background: var(--spectrum-gray-200);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 11px;
+  color: var(--spectrum-accent-color-800);
+}
+
+/* ── List containers ─────────────────────────────────────────────────────── */
+
+.sp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Add-row ─────────────────────────────────────────────────────────────── */
+
+.sp-add-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ── Toast overlay (fixed, bottom-center, shared by all status messages) ── */
+
+.sp-toast-overlay {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.sp-toast-overlay sp-toast {
+  pointer-events: auto;
+}
+
+/* ── Actions bar ─────────────────────────────────────────────────────────── */
+
+.sp-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 20px;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Environment cards
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.env-card {
+  border: 1px solid var(--spectrum-gray-100);
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.env-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--spectrum-gray-200);
+  transition: background 0.15s, border-color 0.15s;
+}
+
+/* Color Themes
+/* ------------------ */
+
+/*  Gray  */
+.env-card__header[data-env-color="gray"]       { background: var(--spectrum-gray-300); }
+.env-card__header[data-env-color="gray"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-gray-200);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-gray-300);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-gray-200);
+}
+/*  Red  */
+.env-card__header[data-env-color="red"]        { background: var(--spectrum-red-200); }
+.env-card__header[data-env-color="red"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-red-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-red-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-red-300);
+}
+/*  Orange  */
+.env-card__header[data-env-color="orange"]     { background: var(--spectrum-orange-200); }
+.env-card__header[data-env-color="orange"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-orange-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-orange-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-orange-300);
+}
+/*  Yellow  */
+.env-card__header[data-env-color="yellow"]     { background: var(--spectrum-yellow-200); }
+.env-card__header[data-env-color="yellow"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-yellow-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-yellow-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-yellow-300);
+}
+/*  Chartreuse  */
+.env-card__header[data-env-color="chartreuse"] { background: var(--spectrum-chartreuse-200); }
+.env-card__header[data-env-color="chartreuse"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-chartreuse-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-chartreuse-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-chartreuse-300);
+}
+/*  Celery  */
+.env-card__header[data-env-color="celery"]     { background: var(--spectrum-celery-200); }
+.env-card__header[data-env-color="celery"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-celery-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-celery-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-celery-300);
+}
+/*  Green  */
+.env-card__header[data-env-color="green"]      { background: var(--spectrum-green-200); }
+.env-card__header[data-env-color="green"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-green-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-green-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-green-300);
+}
+/*  Seafoam  */
+.env-card__header[data-env-color="seafoam"]    { background: var(--spectrum-seafoam-200); }
+.env-card__header[data-env-color="seafoam"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-seafoam-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-seafoam-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-seafoam-300);
+}
+/*  Blue  */
+.env-card__header[data-env-color="blue"]       { background: var(--spectrum-blue-200); }
+.env-card__header[data-env-color="blue"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-blue-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-blue-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-blue-300);
+}
+/* Indigo */
+.env-card__header[data-env-color="indigo"]     { background: var(--spectrum-indigo-200); }
+.env-card__header[data-env-color="indigo"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-indigo-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-indigo-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-indigo-300);
+}
+/*  Purple  */
+.env-card__header[data-env-color="purple"]     { background: var(--spectrum-purple-200); }
+.env-card__header[data-env-color="purple"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-purple-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-purple-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-purple-300);
+}
+/*  Fuchsia  */
+.env-card__header[data-env-color="fuchsia"]    { background: var(--spectrum-fuchsia-200); }
+.env-card__header[data-env-color="fuchsia"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-fuchsia-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-fuchsia-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-fuchsia-300);
+}
+/*  Magenta  */
+.env-card__header[data-env-color="magenta"]    { background: var(--spectrum-magenta-200); }
+.env-card__header[data-env-color="magenta"] sp-action-button {
+  --spectrum-actionbutton-background-color-hover: var(--spectrum-magenta-300);
+  --spectrum-actionbutton-background-color-down:  var(--spectrum-magenta-200);
+  --spectrum-actionbutton-background-color-focus: var(--spectrum-magenta-300);
+}
+
+.env-card__collapse {
+  flex-shrink: 0;
+}
+
+.env-card__reorder {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.env-card__reorder sp-action-button {
+  --spectrum-actionbutton-height: 20px;
+  --spectrum-actionbutton-icon-size: 14px;
+}
+
+.env-card__remove {
+  flex-shrink: 0;
+  color: var(--spectrum-negative-color-800);
+}
+
+.env-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--spectrum-gray-100);
+  border-top: 1px solid var(--spectrum-gray-300);
+  max-height: 2000px;
+  transition: max-height 0.25s ease, padding 0.2s ease, opacity 0.2s ease;
+  opacity: 1;
+}
+
+.env-card__body--collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-top-color: transparent;
+}
+
+/* Label + field stacked pair */
+.sp-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sp-field__label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sp-help-trigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+.sp-help-trigger sp-icon-info {
+  width: 12px;
+  height: 12px;
+  color: var(--spectrum-gray-600);
+  cursor: help;
+}
+
+.sp-help-trigger sp-icon-info:hover {
+  color: var(--spectrum-gray-800);
+}
+
+.sp-field sp-textfield {
+  width: 100%;
+}
+
+/* Environment Name field [quiet] */
+.env-card__name-wrap {
+  flex: 1;
+  min-width: 0;
+}
+
+.env-card__name-input {
+  width: 100%;
+  --mod-textfield-font-weight: var(--spectrum-bold-font-weight);
+}
+@media (prefers-color-scheme: dark) {
+  .env-card__name-input {
+    --mod-textfield-border-color: var(--spectrum-transparent-white-300);
+    --mod-textfield-text-color-default: var(--spectrum-transparent-white-800);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .env-card__name-input {
+    --mod-textfield-border-color: var(--spectrum-transparent-black-300);
+    --mod-textfield-text-color-default: var(--spectrum-transparent-black-800);
+  }
+}
+
+.env-card__fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.env-card__color-picker {
+  width: 100%;
+}
+
+/* Stack to single column on narrow side panels */
+@media (max-width: 400px) {
+  .env-card__fields {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Language Master cards
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lm-card {
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 8px;
+  background: var(--spectrum-gray-75);
+  overflow: hidden;
+}
+
+.lm-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  background: var(--spectrum-gray-100);
+}
+
+.lm-card__path-wrap {
+  flex: 1;
+}
+
+.lm-card__collapse {
+  flex-shrink: 0;
+}
+
+.lm-card__remove {
+  flex-shrink: 0;
+  color: var(--spectrum-negative-color-800);
+}
+
+.lm-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px 12px;
+  border-top: 1px solid var(--spectrum-gray-300);
+  max-height: 2000px;
+  transition: max-height 0.25s ease, padding 0.2s ease, opacity 0.2s ease;
+  opacity: 1;
+}
+
+.lm-card__body--collapsed {
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  pointer-events: none;
+  border-top-color: transparent;
+}
+
+.lm-card__add-lc {
+  align-self: flex-start;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Live Copy rows
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.lc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px;
+  background: var(--spectrum-gray-200);
+  border: 1px solid var(--spectrum-gray-300);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.lc-row .sp-field {
+  flex: 1 0 auto;
+}
+
+.lc-row__remove {
+  color: var(--spectrum-negative-color-800);
+  flex-shrink: 0;
+  margin-top: -5px;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.lc-row:hover .lc-row__remove {
+  opacity: 1;
+}

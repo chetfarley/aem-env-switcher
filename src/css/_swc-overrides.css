@@ -1,0 +1,61 @@
+/* ==========================================================================
+   _swc-overrides.css
+   Spectrum Web Components token overrides.
+
+   sp-theme handles all color tokens. This file only overrides what our
+   specific UI requires beyond Spectrum defaults — sizing, layout nudges,
+   and structural overrides. Never !important or shadow-DOM selectors.
+
+   Reference: https://opensource.adobe.com/spectrum-web-components/
+   ========================================================================== */
+
+/* ── Published popover ────────────────────────────────────────────────────── */
+
+#published-menu {
+  min-width: 180px;
+  max-height: none;
+}
+
+#published-menu sp-menu-item {
+  min-width: 180px;
+  /* Spectrum token for vertical padding inside menu items */
+  --spectrum-menu-item-top-to-text: var(--spacing-md);
+  --spectrum-menu-item-bottom-to-text: var(--spacing-md);
+}
+
+/* Empty-state item — muted, non-interactive */
+#published-menu .published-menu__empty {
+  font-style: italic;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ── Action buttons ────────────────────────────────────────────── */
+
+/* Cursor fix for disabled sp-button (Spectrum leaves pointer by default) */
+sp-button[disabled] {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* ── titlebar env picker ─────────────────────────────────────────────────── */
+
+#envSelect {
+  --mod-picker-font-weight: var(--spectrum-bold-font-weight);
+}
+
+
+/* Spectrum's constructed stylesheet sets max-height:100% on the sp-popover and
+   sp-menu :host, clamping the dropdown to perceived available space. Since
+   sp-picker promotes its overlay to the browser top layer, we can't use a
+   descendant selector — target the elements directly. !important is needed to
+   beat the constructed stylesheet specificity. */
+sp-popover {
+  height: auto !important;
+  max-height: 135px !important;
+}
+
+sp-menu {
+  height: auto !important;
+  max-height: 135px !important;
+}
